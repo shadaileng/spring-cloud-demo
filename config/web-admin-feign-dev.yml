@@ -6,12 +6,6 @@ spring:
     cache: false
     servlet:
       content-type: text/html
-  cloud:
-    config:
-      uri: http://localhost:8888
-      label: master
-      name: web-admin-feign
-      profile: dev
 
 server:
   port: 8765
