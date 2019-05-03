@@ -11,7 +11,6 @@
         <relativePath>../spring-cloud-demo-dependencies/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.qpf</groupId>
     <artifactId>spring-cloud-demo-eureka</artifactId>
     <packaging>jar</packaging>
 
@@ -31,6 +30,14 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zipkin</artifactId>
+        </dependency>
         <!-- Spring Cloud End -->
     </dependencies>
 
@@ -39,9 +46,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>com.qpf.spring.cloud.demo.eureka.EurekaApplication</mainClass>
-                </configuration>
             </plugin>
         </plugins>
     </build>

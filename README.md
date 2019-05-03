@@ -67,7 +67,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <archive>
-                        <addmavendescriptor>false</addmavendescriptor>
+                        <addMavenDescriptor>false</addMavenDescriptor>
                     </archive>
                 </configuration>
                 <executions>
@@ -271,7 +271,6 @@
         <relativePath>../spring-cloud-demo-dependencies/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.qpf</groupId>
     <artifactId>spring-cloud-demo-eureka</artifactId>
     <packaging>jar</packaging>
 
@@ -382,7 +381,6 @@ eureka:
         <relativePath>../spring-cloud-demo-dependencies/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.qpf</groupId>
     <artifactId>spring-cloud-demo-service-admin</artifactId>
     <packaging>jar</packaging>
 
@@ -496,7 +494,6 @@ public class DemoController {
         <relativePath>../spring-cloud-demo-dependencies/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.qpf</groupId>
     <artifactId>spring-cloud-demo-web-admin-ribbon</artifactId>
     <packaging>jar</packaging>
 
@@ -664,7 +661,6 @@ public class DemoController {
         <relativePath>../spring-cloud-demo-dependencies/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.qpf</groupId>
     <artifactId>spring-cloud-demo-web-admin-feign</artifactId>
     <packaging>jar</packaging>
 
@@ -766,7 +762,7 @@ package com.qpf.spring.cloud.demo.web.admin.feign.service;
 @FeignClient("SPRING-CLOUD-DEMO-SERVICE-ADMIN")
 public interface DemoService {
     @GetMapping("demo")
-    public String demo(@RequestParam(value = "msg", required = false) String msg);
+    String demo(@RequestParam(value = "msg", required = false) String msg);
 }
 ```
 
@@ -774,7 +770,7 @@ public interface DemoService {
 
 控制器调用`Feign`接口,获取服务返回结果
 
-```
+```java
 package com.qpf.spring.cloud.demo.web.admin.feign.controller;
 
 @RestController
@@ -788,4 +784,799 @@ public class DemoController {
         return demoService.demo(msg);
     }
 }
-``
+```
+
+# 启用服务熔断器
+
+微服务架构中,根据业务拆分一个个服务,服务之间通过`RPC`或者`REST API`通讯,为了高可用,通常将单个服务进行集群部署.
+
+但是不能保证每个服务`100%`可用,如果单个服务出现问题,就会导致调用这个服务的线程阻塞.如果此时有大量请求涌入,就会导致`Servlet`容器的线程资源耗尽,导致服务瘫痪.
+
+服务之间相互依赖,故障就会传播,最终可能瘫痪整个微服务系统.服务故障的"雪崩"效应.
+
+使用熔断器就可以避免这样的问题.
+
+`Netflix`开源了`Hystrix`组件,实现了熔断器模式,`Spring Cloud`对这一组件进行了整合.
+
+当对特定的服务的调用的不可用达到一个阀值(`Hystrix`是`5`秒`20`次)熔断器将会被打开.
+
+熔断器打开后,为了避免连锁故障,通过`fallback`方法可以直接返回一个固定值.
+
+## Ribbon中使用熔断器
+
+### Pom
+
+`pom.xml`文件添加`spring-cloud-starter-netflix-hystrix`依赖
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+</dependency>
+```
+
+### 入口程序
+
+入口程序添加`@EnableHystrix`注解,启用`Hystrix`
+
+```java
+package com.qpf.spring.cloud.demo.web.admin.ribbon;
+
+@EnableHystrix
+@EnableDiscoveryClient
+@SpringBootApplication
+public class WebAdminRibbonApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(WebAdminRibbonApplication.class, args);
+    }
+}
+```
+
+### Service
+
+`Service`中`Ribbon`调用的方法添加`@HystrixCommand`注解,并指定`fallback`方法
+
+```java
+package com.qpf.spring.cloud.demo.web.admin.ribbon.service.impl;
+
+@Service
+public class DemoServiceImpl implements DemoService {
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @HystrixCommand(fallbackMethod = "hasError")
+    public String demo(String msg) {
+        return restTemplate.getForObject(String.format("http://SPRING-CLOUD-DEMO-SERVICE-ADMIN/demo?msg=%s", msg), String.class);
+    }
+
+    public String hasError(String msg) {
+        return String.format("msg: %s, but request bad", msg);
+    }
+}
+```
+
+### 测试服务熔断
+
+关闭服务提供者,浏览器请求`http://localhost:8764/demo?msg=hello`,返回结果
+```text
+msg: hello, but request bad
+```
+
+## Feign中使用熔断器
+
+### 配置文件
+
+`feign`自带熔断器,默认是关闭的,配置文件中启用即可:
+```properties
+feign.hystrix.enabled = true
+```
+
+### Service接口
+
+`Service`接口中的`@FeignClient`注解指定`fallback`类,这个类是该`Service`接口的实现类
+```java
+@Service
+@FeignClient(value = "SPRING-CLOUD-DEMO-SERVICE-ADMIN", fallback = DemoServiceHystrix.class)
+public interface DemoService {
+    @GetMapping("demo")
+    String demo(@RequestParam(value = "msg", required = false) String msg);
+}
+```
+
+### fallback类
+
+`fallback`类实现对应`Service`接口,并标注`@Component`注解,将其放入`Ioc`容器中.
+```java
+package com.qpf.spring.cloud.demo.web.admin.feign.service.hystrix;
+
+@Component
+public class DemoServiceHystrix implements DemoService {
+    @Override
+    public String demo(String msg) {
+        return String.format("msg: %s, but request bad", msg);
+    }
+}
+```
+
+# 熔断器监视器
+
+在`Ribbon`和`Feign`项目增加`Hystrix`仪表盘功能,两个项目的改造方式相同.
+
+## Pom
+
+`pom.xml`文件中添加`spring-cloud-starter-netflix-hystrix-dashboard`依赖
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
+</dependency>
+```
+
+## 入口程序
+
+入口程序标注`@EnableHystrixDashboard`注解,启用熔断器监视器
+```java
+package com.qpf.spring.cloud.demo.web.admin.ribbon;
+
+@EnableHystrixDashboard
+@EnableHystrix
+@EnableDiscoveryClient
+@SpringBootApplication
+public class WebAdminRibbonApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(WebAdminRibbonApplication.class, args);
+    }
+}
+```
+
+## 注册HystrixMetricsStreamServlet
+
+`Spring Boot 1.x`只需要在配置文件中配置`HystrixMetricsStreamServlet`,`Spring Boot 2.x`需要在容器中注册`HystrixMetricsStreamServlet`
+```java
+package com.qpf.spring.cloud.demo.web.admin.ribbon.config;
+
+@Configuration
+public class HystrixDashboardConfig {
+    @Bean
+    public ServletRegistrationBean<HystrixMetricsStreamServlet> histrixStream() {
+        HystrixMetricsStreamServlet streamServlet = new HystrixMetricsStreamServlet();
+        ServletRegistrationBean<HystrixMetricsStreamServlet> registrationBean = new ServletRegistrationBean<>(streamServlet);
+        registrationBean.setLoadOnStartup(1);
+        registrationBean.addUrlMappings("/hystrix.stream");
+        registrationBean.setName("HystrixMetricsStreamServlet");
+
+        return registrationBean;
+    }
+}
+```
+
+## 测试
+
+启动`Eureka`注册中心以及服务消费者,然后浏览器访问`http://localhost:8764/hystrix`
+
+在页面中输入监听的消费者实例`http://localhost:8764/hystrix.stream`,监听器标题`WebAdminRibbonHystrixDashboard`
+
+点击`Monitor Stream`
+
+访问`http://localhost:8764/demo`触发熔断器,在监视器中显示熔断信息
+
+# API网关
+
+在`Spring Cloud`微服务系统中,一种常见的负载均衡方式是,客户端的请求先经过负载均衡(`Zuul`或`Ngnix`),再到网关服务(`Zuul`集群),再到具体的服务.
+
+服务统一注册到高可用服务注册中心,服务配置由配置服务管理,配置文件放在`Git`仓库中,方便维护人员管理.
+
+`Zuul`的路由转发功能和默认的负载均衡功能很适合作为`API`网关.
+
+## Pom
+
+创建路由网关模块,`pom.xml`文件如下:
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.qpf</groupId>
+        <artifactId>spring-cloud-demo-dependencies</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../spring-cloud-demo-dependencies/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>spring-cloud-demo-zuul</artifactId>
+    <packaging>jar</packaging>
+
+    <name>spring-cloud-demo-zuul</name>
+
+    <dependencies>
+        <!-- Spring Boot Begin -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Spring Boot End -->
+
+        <!-- Spring Cloud Begin -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+        </dependency>
+        <!-- Spring Cloud End -->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
+
+主要是导入`spring-cloud-starter-netflix-zuul`和`spring-cloud-starter-netflix-eureka-server`的依赖
+
+## 入口程序
+
+入口程序标注`@EnableZuulProxy`注解,开启路由转发功能,`@EnableEurekaClient`注解注册服务到注册中心
+```java
+package com.qpf.spring.cloud.demo.zuul;
+
+@EnableZuulProxy
+@EnableEurekaClient
+@SpringBootApplication
+public class ZuulApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ZuulApplication.class, args);
+    }
+}
+```
+
+## 配置文件
+`application.yml`文件配置路由
+```yaml
+spring:
+  application:
+    name: spring-cloud-demo-zuul
+server:
+  port: 8769
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+zuul:
+  routes:
+    api-a:
+      path: /api/a/**
+      serviceId: spring-cloud-demo-web-admin-feign
+    api-b:
+      path: /api/b/**
+      serviceId: spring-cloud-demo-web-admin-ribbon
+```
+
+## 测试访问
+
+启动`Eureka`注册中心,服务生产者,服务发现者和`Zuul`网关
+
+浏览器访问`http://localhost:8769/api/a/demo?msg=hello`,调用`spring-cloud-demo-web-admin-feign`服务
+浏览器访问`http://localhost:8769/api/b/demo?msg=hello`,调用`spring-cloud-demo-web-admin-ribbon`服务
+
+## 网关高可用
+
+配置网关失败时的回调,可以提高用户体验.
+
+`Ioc`容器添加公共的响应`CommonRespone`
+
+```java
+package com.qpf.spring.cloud.demo.zuul.fallback;
+
+@Component
+public class CommonResponse implements ClientHttpResponse {
+    @Override
+    public HttpHeaders getHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        return headers;
+    }
+
+    @Override
+    public InputStream getBody() throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("status", 200);
+        params.put("message", "无法连接,请检查你的网络");
+        return new ByteArrayInputStream(new ObjectMapper().writeValueAsString(params).getBytes("UTF-8"));
+    }
+
+    @Override
+    public HttpStatus getStatusCode() throws IOException {
+        return HttpStatus.OK;
+    }
+
+    @Override
+    public int getRawStatusCode() throws IOException {
+        return HttpStatus.OK.value();
+    }
+
+    @Override
+    public String getStatusText() throws IOException {
+        return HttpStatus.OK.getReasonPhrase();
+    }
+
+    @Override
+    public void close() {
+
+    }
+}
+```
+
+为对应的服务调用配置回调,服务`Id`对应响应
+
+- `spring-cloud-demo-web-admin-feign`
+```java
+package com.qpf.spring.cloud.demo.zuul.fallback;
+
+@Component
+public class WebAdminFeignFallbackProvider implements FallbackProvider {
+
+    @Autowired
+    private CommonResponse commonResponse;
+
+    @Override
+    public String getRoute() {
+        return "spring-cloud-demo-web-admin-feign";
+    }
+
+    @Override
+    public ClientHttpResponse fallbackResponse(String route, Throwable cause) {
+        return commonResponse;
+    }
+}
+```
+- `spring-cloud-demo-web-admin-ribbon`
+```java
+package com.qpf.spring.cloud.demo.zuul.fallback;
+
+@Component
+public class WebAdminRibbonFallbackProvider implements FallbackProvider {
+    @Autowired
+    private CommonResponse commonResponse;
+
+    @Override
+    public String getRoute() {
+        return "spring-cloud-demo-web-admin-ribbon";
+    }
+
+    @Override
+    public ClientHttpResponse fallbackResponse(String route, Throwable cause) {
+        return commonResponse;
+    }
+}
+```
+
+关闭服务消费者
+- 浏览器访问`http://localhost:8769/api/a/demo?msg=hello`,调用`spring-cloud-demo-web-admin-feign`服务失败,返回`{"message":"无法连接,请检查你的网络","status":200}`
+- 浏览器访问`http://localhost:8769/api/b/demo?msg=hello`,调用`spring-cloud-demo-web-admin-ribbon`服务失败,返回`{"message":"无法连接,请检查你的网络","status":200}`
+
+## 服务过滤
+
+
+`Zuul`不仅有路由转发的功能,还有过滤器的功能.
+
+在`Ioc`容器中添加`ZuulFilter`的子类,即可根据过滤规则过滤请求
+```java
+package com.qpf.spring.cloud.demo.zuul.filter;
+
+@Component
+public class ApiFilter extends ZuulFilter {
+    private final static Logger logger = LoggerFactory.getLogger(ApiFilter.class);
+    @Override
+    public String filterType() {
+        return "pre";
+    }
+
+    @Override
+    public int filterOrder() {
+        return 0;
+    }
+
+    @Override
+    public boolean shouldFilter() {
+        return true;
+    }
+
+    @Override
+    public Object run() throws ZuulException {
+        RequestContext context = RequestContext.getCurrentContext();
+        HttpServletRequest request = context.getRequest();
+
+        logger.info("{}>>>{}", request.getMethod(), request.getRequestURI());
+
+        String token = request.getParameter("token");
+        if (StringUtils.isEmpty(token)) {
+            logger.warn("Token is Empty");
+            context.setSendZuulResponse(false);
+            context.setResponseStatusCode(401);
+            HttpServletResponse response = context.getResponse();
+            try {
+                response.setHeader("contentType", "text/html;charset=utf-8");
+                response.getWriter().println("Token is Empty");
+            } catch (IOException e) {
+                logger.error("response error: {}", e.getMessage());
+            }
+        } else {
+            logger.info("status: Ok");
+        }
+
+        return null;
+    }
+}
+```
+
+- `filterType`: 指定过滤器发生的时间,可以返回的值有:
+    - `pre`: 路由之前
+    - `routing`: 路由发生之时
+    - `post`: 路由之后
+    - `error`: 发送错误之后
+- `filterOrder`: 过滤器顺序号
+- `shouldFilter`: 是否启用过滤器
+- `run`: 过滤规则
+
+浏览器访问`http://localhost:8769/api/a/demo?msg=hello`,返回
+```text
+Token is Empty
+```
+
+浏览器访问`http://localhost:8769/api/a/demo?msg=hello&token=1111`,返回
+```text
+msg: hello, port: 8763
+```
+
+# 分布式配置中心
+
+在分布式系统中,由于服务数量巨多,为了方便服务配置文件统一管理,实时更新,所以需要分布式配置中心组件.
+
+在`Spring Cloud`中,有分布式配置中心组件`Spring Cloud Config`,它支持配置服务放在配置服务的内存中(即本地),也支持放在远程`Git`仓库中.
+
+在`Spring Cloud Config`组件中,分两个角色,一是`Config Server`,二是`Config Client`.
+
+## 配置中心服务端
+
+### Pom
+
+创建名为`spring-cloud-config`的项目,`pom.xml`文件如下:
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.qpf</groupId>
+        <artifactId>spring-cloud-demo-dependencies</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>spring-cloud-demo-config</artifactId>
+    <packaging>jar</packaging>
+
+    <name>spring-cloud-demo-config</name>
+
+    <dependencies>
+        <!-- Spring Boot Begin -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Spring Boot End -->
+
+        <!-- Spring Cloud Begin -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-config-server</artifactId>
+        </dependency>
+        <!-- Spring Cloud End -->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+```
+
+主要添加`spring-cloud-config-server`的依赖
+
+### 入口程序
+
+入口程序标注`@EnableConfigServe`注解,启用配置服务,`@EnableEurekaClient`注解将服务注册到注册中心
+
+```java
+package com.qpf.spring.cloud.config;
+
+@EnableConfigServer
+@EnableEurekaClient
+@SpringBootApplication
+public class ConfigApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ConfigApplication.class, args);
+    }
+}
+```
+
+### 配置文件
+
+`application.yml`文件中配置配置文件的位置
+
+```yaml
+spring:
+  application:
+    name: spring-cloud-demo-config
+  cloud:
+    config:
+      label: master
+      server:
+        git:
+          uri: https://github.com/shadaileng/spring-cloud-demo
+          search-paths: config
+server:
+  port: 8888
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+```
+
+配置中心的默认端口是`8888`,如果需要修改,必须在`bootstrap.yml`文件中配置
+- `spring.cloud.config.label`: 配置仓库的分支
+- `spring.cloud.config.server.git.uri`: 配置`Git`仓库地址(`GitHub`,`GitLab`,码云...)
+- `spring.cloud.config.server.git.search-paths`: 配置仓库路径(存放配置文件的目录)
+- `spring.cloud.config.server.git.username`: 访问`Git`仓库的账号(选填)
+- `spring.cloud.config.server.git.password`: 访问`Git`仓库的密码(选填)
+
+### 测试
+
+`github`仓库中添加配置文件`/config/zuul-dev.yml`
+
+浏览器访问`http://localhost:8888/zuul/dev/master`
+
+> HTTP 请求地址和资源文件映射
+  http://ip:port/{application}/{profile}[/{label}]
+  http://ip:port/{application}-{profile}.yml
+  http://ip:port/{label}/{application}-{profile}.yml
+  http://ip:port/{application}-{profile}.properties
+  http://ip:port/{label}/{application}-{profile}.properties
+
+## 配置中心客户端
+
+### Pom
+
+其他服务都可以作为客户端,`pom.xml`文件添加`spring-cloud-starter-config`依赖
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-config</artifactId>
+</dependency>
+```
+
+### 配置文件
+
+本地的配置文件指定配置在`Git`仓库中的位置
+```yaml
+spring:
+  cloud:
+    config:
+      uri: http://localhost:8888
+      label: master
+      name: zuul
+      profile: dev
+```
+
+- `spring.cloud.config.uri`: 配置服务中心的网址
+- `spring.cloud.config.name`: 配置文件名称的前缀
+- `spring.cloud.config.label`: 配置仓库的分支
+- `spring.cloud.config.profile`: 配置文件的环境标识,一般的标识有
+    - `dev`: 表示开发环境
+    - `test`: 表示测试环境
+    - `prod`: 表示生产环境
+
+这个配置访问的是`Git`仓库中`master`分支的`/config/zuul-dev.yml`或`/config/zuul-dev.properties`文件
+
+为不同的环境编写专门的配置文件,如: `application-dev.yml`、`application-prod.yml`, 启动项目时只需要增加一个命令参数`--spring.profiles.active=环境配置`即可,启动命令如下：
+```shell
+java -jar spring-cloud-demo-web-admin-feign-1.0.0-SNAPSHOT.jar --spring.profiles.active=prod
+```
+
+# 链路追踪
+
+微服务架构是通过业务来划分服务的,使用`REST`调用.对外暴露的一个接口,可能需要很多个服务协同才能完成这个接口功能,如果链路上任何一个服务出现问题或者网络超时,都会形成导致接口调用失败.随着业务的不断扩张,服务之间互相调用会越来越复杂
+
+## Pom
+
+创建名为`spring-cloud-demo-zipkin`的项目,`spring-cloud-demo-dependencies`项目的`pom.xml`添加以下依赖管理
+
+```xml
+<dependencyManagement>
+    <!-- zipkin begin -->
+    <dependency>
+        <groupId>io.zipkin.java</groupId>
+        <artifactId>zipkin</artifactId>
+        <version>${zipkin.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>io.zipkin.java</groupId>
+        <artifactId>zipkin-server</artifactId>
+        <version>${zipkin.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>io.zipkin.java</groupId>
+        <artifactId>zipkin-autoconfigure-ui</artifactId>
+        <version>${zipkin.version}</version>
+    </dependency>
+    <!-- zipkin end -->
+</dependencyManagement>
+```
+
+其中`${zipkin.version}`的值为当前`zipkin`的最新版`2.10.1`
+
+`spring-cloud-demo-zipkin`的`pom.xml`如下
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.qpf</groupId>
+        <artifactId>spring-cloud-demo-dependencies</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+<!--        <relativePath>../spring-cloud-demo-dependencies/pom.xml</relativePath>-->
+    </parent>
+
+    <artifactId>spring-cloud-demo-zipkin</artifactId>
+    <packaging>jar</packaging>
+
+    <name>spring-cloud-demo-zipkin</name>
+
+    <dependencies>
+        <!-- Spring Boot Begin -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Spring Boot End -->
+
+        <!-- Spring Cloud Begin -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <!-- Spring Cloud End -->
+        <!-- zipkin begin -->
+        <dependency>
+            <groupId>io.zipkin.java</groupId>
+            <artifactId>zipkin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.zipkin.java</groupId>
+            <artifactId>zipkin-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.zipkin.java</groupId>
+            <artifactId>zipkin-autoconfigure-ui</artifactId>
+        </dependency>
+        <!-- zipkin end -->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+```
+主要是添加了`zipkin`依赖
+```xml
+<dependency>
+    <!-- zipkin begin -->
+    <dependency>
+        <groupId>io.zipkin.java</groupId>
+        <artifactId>zipkin</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.zipkin.java</groupId>
+        <artifactId>zipkin-server</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.zipkin.java</groupId>
+        <artifactId>zipkin-autoconfigure-ui</artifactId>
+    </dependency>
+    <!-- zipkin end -->
+</dependency>
+```
+
+## 入口程序
+
+入口程序标注`@EnableZipkinServer`,启用`zipkin`服务,`@EnableEurekaClient`将服务注册到注册中心
+
+```java
+@EnableZipkinServer
+@EnableEurekaClient
+@SpringBootApplication
+public class ZipkinApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ZipkinApplication.class, args);
+    }
+}
+```
+
+## 配置文件
+
+`application.yml`配置默认端口`9411`
+
+```yaml
+spring:
+  application:
+    name: spring-cloud-demo-zipkin
+server:
+  port: 9411
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+management:
+  metrics:
+    web:
+      server:
+        auto-time-requests: false
+```
+
+## 配置客户端
+
+除了`dependencies`的工程,其他服务都可以配置为客户端,`pom.xml`文件中添加`spring-cloud-starter-zipkin`的依赖
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-zipkin</artifactId>
+</dependency>
+```
+
+配置文件配置`zipkin`中心
+```yaml
+spring:
+  zipkin:
+    base-url: http://localhost:9411
+```
+
+启动全部项目,然后浏览器访问`http://localhost:9411/`

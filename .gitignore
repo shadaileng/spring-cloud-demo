@@ -3,6 +3,7 @@
 
 # Log file
 *.log
+*.out
 
 # BlueJ files
 *.ctxt
@@ -27,7 +28,7 @@ hs_err_pid*
 **/target/**
 */**/target/**
 !.mvn/wrapper/maven-wrapper.jar
-
+**.jar.**
 ### STS ###
 .apt_generated
 .classpath
