@@ -1,0 +1,11 @@
+version: '3'
+services:
+  spring-cloud-eureka:
+    restart: always
+    image: spring-cloud-eureka:v1
+    container_name: spring-cloud-eureka
+    ports:
+      - 8761:8761
+    environment:
+      TZ: Asia/Shanghai
+

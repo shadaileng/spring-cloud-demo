@@ -1,0 +1,11 @@
+version: '3'
+services:
+  spring-cloud-config:
+    restart: always
+    image: spring-cloud-config:v1
+    container_name: spring-cloud-config
+    ports:
+      - 8888:8888
+    environment:
+      TZ: Asia/Shanghai
+

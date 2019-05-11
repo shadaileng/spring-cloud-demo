@@ -1,0 +1,11 @@
+version: '3'
+services:
+  spring-cloud-zipkin:
+    restart: always
+    image: spring-cloud-zipkin:v1
+    container_name: spring-cloud-zipkin
+    ports:
+      - 9411:9411
+    environment:
+      TZ: Asia/Shanghai
+
