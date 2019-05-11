@@ -1,6 +1,6 @@
 spring:
   application:
-    name: spring-cloud-demo-admin
+    name: spring-cloud-demo-service-admin
   zipkin:
     base-url: http://192.168.96.1:9411
 
