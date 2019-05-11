@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: spring-cloud-demo-web-admin-feign
+  thymeleaf:
+    encoding: UTF-8
+    cache: false
+    servlet:
+      content-type: text/html
+  zipkin:
+    base-url: http://192.168.96.1:9411
+server:
+  port: 8765
+
+feign:
+  hystrix:
+    enabled: true
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.96.1:8761/eureka/

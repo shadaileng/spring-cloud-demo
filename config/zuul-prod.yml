@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: spring-cloud-demo-zuul
+  zipkin:
+    base-url: http://192.168.96.1:9411
+server:
+  port: 8769
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.96.1:8761/eureka
+zuul:
+  routes:
+    api-a:
+      path: /api/a/**
+      serviceId: spring-cloud-demo-web-admin-feign
+    api-b:
+      path: /api/b/**
+      serviceId: spring-cloud-demo-web-admin-ribbon
