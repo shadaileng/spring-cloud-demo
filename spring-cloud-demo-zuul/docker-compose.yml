@@ -2,7 +2,7 @@ version: '3'
 services:
   spring-cloud-zuul:
     restart: always
-    image: spring-cloud-zuul:v1
+    image: spring-cloud-demo-zuul:v1
     container_name: spring-cloud-zuul
     ports:
       - 8769:8769

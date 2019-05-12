@@ -3,5 +3,5 @@ spring:
     config:
       uri: http://localhost:8888
       label: master
-      name: eureka
-      profile: dev
+      name: admin
+      profile: prod

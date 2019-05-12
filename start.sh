@@ -1,6 +1,6 @@
 #!/bin/bash
 
-moduls=("config" "eureka" "service-admin" "web-admin-feign" "web-admin-ribbon" "admin" "zipkin" "zuul")
+moduls=("config" "eureka" "admin" "zipkin" "zuul" "service-admin" "web-admin-feign" "web-admin-ribbon")
 start(){
     for i in ${moduls[*]}; do
         startone $i
@@ -14,52 +14,62 @@ stop(){
 }
 
 stopone(){
-    jar=spring-cloud-demo-$1/target/spring-cloud-demo-$1-0.0.1-SNAPSHOT.jar
-    pid=$(ps -aux | grep $jar | grep -v grep | awk '{print $2}')
-#    echo $pid $jar
-    if [ -n "$pid" ];then
-        kill 9 $pid
-        echo -e "\033[32mkill \t $pid \t $1\033[0m"
+    if [ -n "$1" ];then
+        jar=spring-cloud-demo-$1/target/spring-cloud-demo-$1-0.0.1-SNAPSHOT.jar
+        pid=$(ps -aux | grep $jar | grep -v grep | awk '{print $2}')
+    #    echo $pid $jar
+        if [ -n "$pid" ];then
+            kill -9 $pid
+            echo -e "\033[32mkill \t $pid \t $1\033[0m"
+        else
+            echo -e "\033[36mDown \t\t $1\033[0m"
+        fi
     else
-        echo -e "\033[36mDown \t\t $1\033[0m"
+        echo -e "\033[31minput modul to stop\033[0m"
     fi
 }
 
 startone(){
     if [ -n "$1" ];then
-        if [ "all" = "$1" ]; then
-            echo all
-        else
-            jar=spring-cloud-demo-$1/target/spring-cloud-demo-$1-0.0.1-SNAPSHOT.jar
-#            echo $jar
-            if [ -e $jar ];then
-                pid=$(ps -aux | grep $jar | grep -v grep | awk '{print $2}')
-                if [ -n "$pid" ];then
-                    echo -e "\033[32m$1 Up $pid\033[0m" 
-                else
-                    nohup java -Xmx128m -Xss256k -jar $jar >> nohup.out 2>&1 &
-                    echo -e "\033[33mstarting $1\033[0m"
-                fi
-            else
-                echo not exits $jar
-            fi
-
+        _profilr=""
+        if [ -n "$2" ]; then
+            _profile="--spring.profiles.active=$2"
         fi
+#        echo "profile is $_profile"
+        
+        jar=spring-cloud-demo-$1/target/spring-cloud-demo-$1-0.0.1-SNAPSHOT.jar
+#            echo $jar
+        if [ -e $jar ];then
+            pid=$(ps -aux | grep $jar | grep -v grep | awk '{print $2}')
+            if [ -n "$pid" ];then
+                echo -e "\033[32m$1 Up $pid\033[0m" 
+            else
+                nohup java -Xmx128m -Xss256k -jar $jar $_profile >> nohup.out 2>&1 &
+                echo -e "\033[33mstarting $1 $_profile\033[0m"
+            fi
+        else
+            echo not exits $jar
+        fi
+
     else
-        echo -e "input modul to start"
+        echo -e "\033[31minput modul to start\033[0m"
     fi
 }
 
 list(){
-    echo -e "\033[37mstatus \t pid \t modul\033[0m" 
+#    echo -e "\033[37mstatus\tpid\tmodul\t\t\tprofile\tport\033[0m" 
+    printf "\033[32m%-6s\t%-5s\t%-20s\t\t\t%-5s\t%-5s\n\033[0m" status pid modul profile port
     for i in ${moduls[*]}; do
         jar=spring-cloud-demo-$i/target/spring-cloud-demo-$i-0.0.1-SNAPSHOT.jar
         pid=$(ps -aux | grep $jar | grep -v grep | awk '{print $2}')
+        _profile=$(ps -aux | grep $jar | grep -v grep | awk '{print $NF}' | awk -F'=' '{print $NF}')
 #        echo $pid $jar
         if [ -n "$pid" ];then
-            echo -e "\033[32mUp \t $pid \t $i\033[0m" 
+            port=$(lsof -p $pid | grep LISTEN | awk '{print $(NF-1)}' | awk -F':' '{print $NF}')
+#            echo -e "\033[32mUp\t$pid\t$i\t\t\t$_profile\t$port\033[0m" 
+            printf "\033[32mUp\t%-5s\t%-20s\t\t\t%-5s\t%-5s\n\033[0m" $pid $i $_profile $port
         else
-            echo -e "\033[36mDown \t\t $i\033[0m"
+            echo -e "\033[36mDown\t\t$i\033[0m"
         fi
     done
 }
@@ -72,7 +82,7 @@ case $1 in
         stop
     ;;
     startone)
-        startone $2
+        startone $2 $3
     ;;
     list)
         list
@@ -80,8 +90,11 @@ case $1 in
     stopone)
         stopone $2
     ;;
+    package)
+        mvn clean package
+    ;;
     *)
-        echo -e "\033[33mstart.sh start|stop|startone|list|stopone\033[0m"
+        echo -e "\033[33mstart.sh start|stop|startone|list|stopone|package\033[0m"
         exit 1
     ;;
 esac

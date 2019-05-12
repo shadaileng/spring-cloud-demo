@@ -12,6 +12,6 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 
 COPY target/spring-cloud-demo-eureka-$APP_VERSION.jar /usr/local/app/app.jar
 
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/usr/local/app/app.jar"]
+ENTRYPOINT ["dockerize", "-timeout", "5m", "-wait", "tcp://192.168.96.1:8888", "java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/usr/local/app/app.jar", "--spring.profiles.active=prod"]
 
 EXPOSE 8761

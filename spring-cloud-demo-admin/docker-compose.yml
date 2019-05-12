@@ -1,0 +1,11 @@
+version: '3'
+services:
+  spring-cloud-admin:
+    restart: always
+    image: spring-cloud-admin:v1
+    container_name: spring-cloud-admin
+    ports:
+      - 8084:8084
+    environment:
+      TZ: Asia/Shanghai
+

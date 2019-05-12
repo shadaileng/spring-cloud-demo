@@ -1,0 +1,11 @@
+version: '3'
+services:
+  spring-cloud-web-admin-feign:
+    restart: always
+    image: spring-cloud-web-admin-feign:v1
+    container_name: spring-cloud-web-admin-feign
+    ports:
+      - 8765:8765
+    environment:
+      TZ: Asia/Shanghai
+
