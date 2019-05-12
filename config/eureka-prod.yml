@@ -2,13 +2,13 @@ spring:
   application:
     name: spring-cloud-demo-eureka
   zipkin:
-    base-url: http://192.168.96.1:9411
+    base-url: http://10.254.198.150:9411
 server:
   port: 8761
 
 eureka:
   instance:
-    hostname: 192.168.96.1
+    hostname: 10.254.198.150
   client:
     register-with-eureka: false
     fetch-registry: false

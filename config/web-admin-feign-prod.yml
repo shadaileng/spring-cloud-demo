@@ -7,7 +7,7 @@ spring:
     servlet:
       content-type: text/html
   zipkin:
-    base-url: http://192.168.96.1:9411
+    base-url: http://10.254.198.150:9411
 server:
   port: 8765
 
@@ -18,4 +18,4 @@ feign:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://192.168.96.1:8761/eureka/
+      defaultZone: http://10.254.198.150:8761/eureka/
