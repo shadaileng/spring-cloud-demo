@@ -74,6 +74,69 @@ list(){
     done
 }
 
+buildone(){
+    if [ -n "$1" ];then
+#        sudo docker build -t spring-cloud-config spring-cloud-config -f spring-cloud-config/Dockerfile
+        dir="spring-cloud-demo-$1"
+        if [ -d $dir ];then
+            echo -e "\033[32m build $1\033[0m"
+            sudo docker build -t "spring-cloud-$1" $dir -f ./$dir/Dockerfile
+        else
+            echo -e "\033[31mdir $dir not exits\033[0m"
+        fi
+    else
+        echo -e "\033[31minput modul to start\033[0m"
+    fi
+}
+
+build(){
+    for i in ${moduls[*]}; do
+        buildone $i
+    done
+}
+
+deployone(){
+    if [ -n "$1" ];then
+#        sudo docker-compose -f spring-cloud-demo-config/docker-compose.yml up -d
+        dir="spring-cloud-demo-$1"
+        if [ -d $dir ];then
+            echo -e "\033[32m deploy $1\033[0m"
+            sudo docker-compose -f "$dir/docker-compose.yml" up -d
+        else
+            echo -e "\033[31mdir $dir not exits\033[0m"
+        fi
+    else
+        echo -e "\033[31minput modul to deploy\033[0m"
+    fi
+}
+
+deploy(){
+    for i in ${moduls[*]}; do
+        deploy $i
+    done
+}
+
+undeployone(){
+    if [ -n "$1" ];then
+#        sudo docker-compose -f spring-cloud-demo-config/docker-compose.yml down
+        dir="spring-cloud-demo-$1"
+        if [ -d $dir ];then
+            echo -e "\033[32m undeploy $1\033[0m"
+            sudo docker-compose -f "$dir/docker-compose.yml" down
+        else
+            echo -e "\033[31mdir $dir not exits\033[0m"
+        fi
+    else
+        echo -e "\033[31minput modul to undeploy\033[0m"
+    fi
+}
+
+undeploy(){
+    for i in ${moduls[*]}; do
+        undeployone $i
+    done
+}
+
 case $1 in
     start)
         start $2
@@ -93,8 +156,26 @@ case $1 in
     package)
         mvn clean package
     ;;
+    buildone)
+        buildone $2
+    ;;
+    build)
+        build
+    ;;
+    deployone)
+        deployone $2
+    ;;
+    deploy)
+        deploy
+    ;;
+    undeployone)
+        undeployone $2
+    ;;
+    undeploy)
+        undeploy
+    ;;
     *)
-        echo -e "\033[33mstart.sh start|stop|startone|list|stopone|package\033[0m"
+        echo -e "\033[33mstart.sh start|stop|startone|list|stopone|package|buildone|build|deployone|deploy|undeployone|undeploy\033[0m"
         exit 1
     ;;
 esac
