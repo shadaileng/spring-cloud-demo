@@ -1,14 +1,15 @@
+ipaddr: 116.85.54.176
 spring:
   application:
     name: spring-cloud-demo-eureka
   zipkin:
-    base-url: http://192.168.96.1:9411
+    base-url: http://${ipaddr}:9411
 server:
   port: 8761
 
 eureka:
   instance:
-    hostname: 192.168.96.1
+    hostname: ${ipaddr}
   client:
     register-with-eureka: false
     fetch-registry: false

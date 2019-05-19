@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: spring-cloud-demo-config
+  cloud:
+    config:
+      label: master
+      server:
+        git:
+          uri: https://github.com/shadaileng/spring-cloud-demo.git
+          search-paths: config
+  zipkin:
+    base-url: http://localhost:9411
+server:
+  port: 8888
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,info
