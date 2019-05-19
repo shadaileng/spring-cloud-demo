@@ -15,6 +15,6 @@ RUN tar -C /usr/local/bin -xzvf /tmp/dockerize.tar.gz \
 
 COPY $APP_FLAG/target/$APP_FLAG-$APP_VERSION.jar /usr/local/app/app.jar
 
-ENTRYPOINT ["dockerize", "-timeout", "5m", "-wait", "tcp://10.254.198.150:8888", "java", "-Djava.security.egd=file:/dev/./urandom", "-Xmx128m -Xss256k", "-jar", "/usr/local/app/app.jar", "--spring.profiles.active=prod"]
+ENTRYPOINT ["dockerize", "-timeout", "5m", "-wait", "tcp://10.254.198.150:8888", "java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/usr/local/app/app.jar", "--spring.profiles.active=prod"]
 
 EXPOSE 8765
