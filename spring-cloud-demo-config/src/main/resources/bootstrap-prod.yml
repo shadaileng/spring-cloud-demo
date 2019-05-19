@@ -1,3 +1,4 @@
+ipaddr: 116.85.54.176
 spring:
   application:
     name: spring-cloud-demo-config
@@ -9,13 +10,13 @@ spring:
           uri: https://github.com/shadaileng/spring-cloud-demo.git
           search-paths: config
   zipkin:
-    base-url: http://192.168.96.1:9411
+    base-url: http://${ipaddr}:9411
 server:
   port: 8888
 eureka:
   client:
     service-url:
-      defaultZone: http://192.168.96.1:8761/eureka
+      defaultZone: http://${ipaddr}/eureka
 management:
   endpoint:
     health:
