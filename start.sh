@@ -80,7 +80,7 @@ buildone(){
         dir="spring-cloud-demo-$1"
         if [ -d $dir ];then
             echo -e "\033[32m build $1\033[0m"
-            sudo docker build --no-cache -t "spring-cloud-$1" .
+            sudo docker build --no-cache -t "spring-cloud-$1" . -f "$dir/Dockerfile"
         else
             echo -e "\033[31mdir $dir not exits\033[0m"
         fi
