@@ -1,5 +1,8 @@
 #!/bin/bash
 
+res="resources"
+DOCKERIZE_VERSION=v0.6.1
+
 moduls=("config" "eureka" "admin" "zipkin" "zuul" "service-admin" "web-admin-feign" "web-admin-ribbon")
 start(){
     for i in ${moduls[*]}; do
@@ -80,7 +83,7 @@ buildone(){
         dir="spring-cloud-demo-$1"
         if [ -d $dir ];then
             echo -e "\033[32m build $1\033[0m"
-            sudo docker build --no-cache -t "spring-cloud-$1:v1" . -f "$dir/Dockerfile"
+            sudo docker build --no-cache -t "spring-cloud-$1:v1" $dir -f "$dir/Dockerfile"
             dl=$(sudo docker images -q -f dangling=true)
             if [ -n "$dl" ];then
                 echo -e "\033[32m delete dangling image \033[0m"
@@ -125,9 +128,15 @@ undeployone(){
     if [ -n "$1" ];then
 #        sudo docker-compose -f spring-cloud-demo-config/docker-compose.yml down
         dir="spring-cloud-demo-$1"
+        container="spring-cloud-$1"
         if [ -d $dir ];then
-            echo -e "\033[32m undeploy $1\033[0m"
-            sudo docker-compose -f "$dir/docker-compose.yml" down
+            echo -e "\033[32m undeploy $1 ...\033[0m"
+            stat=$(sudo docker ps | grep $container)
+            if [ -n "$stat" ];then
+                sudo docker-compose -f "$dir/docker-compose.yml" down
+            else
+                echo -e "\033[31m$container dowm \033[0m"
+            fi
         else
             echo -e "\033[31mdir $dir not exits\033[0m"
         fi
@@ -140,6 +149,16 @@ undeploy(){
     for i in ${moduls[*]}; do
         undeployone $i
     done
+}
+
+package(){
+    mvn clean package
+    [ ! -d "$res" ] && mkdir $res
+#    cp spring-cloud-demo*/target/*.jar $res
+    if [ ! -f "$res/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz" ];then
+        wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz -P $res
+    fi
+    ls -F | grep "^spring-cloud-.*/$" | xargs -n 1 cp $res/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 }
 
 case $1 in
@@ -159,7 +178,7 @@ case $1 in
         stopone $2
     ;;
     package)
-        mvn clean package
+        package
     ;;
     buildone)
         buildone $2

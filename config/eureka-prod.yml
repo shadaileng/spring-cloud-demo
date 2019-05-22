@@ -1,4 +1,4 @@
-ipaddr: 116.85.54.176
+ipaddr: 10.254.198.150 
 spring:
   application:
     name: spring-cloud-demo-eureka
