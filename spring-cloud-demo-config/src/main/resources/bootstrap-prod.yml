@@ -14,9 +14,14 @@ spring:
 server:
   port: 8888
 eureka:
+  instance:
+      # 
+      prefer-ip-address: true
+      instance-id: ${ipaddr}:${server.port}
+      ip-address: ${ipaddr}
   client:
-    service-url:
-      defaultZone: http://${ipaddr}/eureka
+    serviceUrl:
+      defaultZone: http://${ipaddr}:8761/eureka
 management:
   endpoint:
     health:
