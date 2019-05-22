@@ -15,9 +15,11 @@ server:
   port: 8888
 eureka:
   instance:
-      # 
+      # 注册时使用ip而不是主机名
       prefer-ip-address: true
+      # 注册的实例名
       instance-id: ${ipaddr}:${server.port}
+      # 指定此实例的ip
       ip-address: ${ipaddr}
   client:
     serviceUrl:
