@@ -8,6 +8,6 @@ ENV APP_FLAG spring-cloud-demo-config
 
 COPY target/$APP_FLAG-$APP_VERSION.jar /usr/local/app/app.jar
 
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "-XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -Xms128m -Xmx128m -Xmn128m -Xss256k -XX:SurvivorRatio=8 -XX:+UseConcMarkSweepGC", "/usr/local/app/app.jar", "--spring.profiles.active=prod"]
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "-Xms64m", "-Xms128m", "-Xmx128m", "-Xss256k", "/usr/local/app/app.jar", "--spring.profiles.active=prod"]
 
 EXPOSE 8888
