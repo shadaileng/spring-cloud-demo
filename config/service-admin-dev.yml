@@ -1,8 +1,19 @@
+
 spring:
   application:
     name: spring-cloud-demo-service-admin
   zipkin:
     base-url: http://localhost:9411
+  datasource:
+    druid:
+      driver-class-name: org.sqlite.JDBC
+      url: jdbc:sqlite:file:F:/qipf/dev/ideaIU/git-respository/spring-annotation/data/data.db
+      username:
+      password:
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      test-on-borrow: true
 
 server:
   port: 8861
