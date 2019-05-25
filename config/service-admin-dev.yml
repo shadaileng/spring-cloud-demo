@@ -14,9 +14,9 @@ spring:
       max-active: 20
       test-on-borrow: true
 
-mybatis:
-  configuration:
-    use-generated-keys: true
+#mybatis:
+#  configuration:
+#    use-generated-keys: true
 
 server:
   port: 8861
