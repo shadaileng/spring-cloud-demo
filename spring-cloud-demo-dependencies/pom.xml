@@ -30,6 +30,10 @@
         <spring.cloud.version>Finchley.RELEASE</spring.cloud.version>
         <zipkin.version>2.10.1</zipkin.version>
         <spring-boot-admin.version>2.0.1</spring-boot-admin.version>
+        <druid.version>1.1.10</druid.version>
+        <th.mybatis.mapper.version>2.1.5</th.mybatis.mapper.version>
+        <pagehelper.version>1.2.10</pagehelper.version>
+        <sqlite.jdbc.version>3.21.0.1</sqlite.jdbc.version>
     </properties>
 
     <dependencyManagement>
@@ -65,6 +69,35 @@
                 <version>${spring-boot-admin.version}</version>
             </dependency>
             <!-- spring-boot-admin end -->
+            <!-- druid begin -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <!-- druid end -->
+            <!-- mybatis begin -->
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-spring-boot-starter</artifactId>
+                <version>${th.mybatis.mapper.version}</version>
+            </dependency>
+            <!-- mybatis end -->
+            <!-- pagehelper begin -->
+            <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${pagehelper.version}</version>
+            </dependency>
+            <!-- pagehelper end -->
+            <!-- sqlite begin -->
+            <dependency>
+                <groupId>org.xerial</groupId>
+                <artifactId>sqlite-jdbc</artifactId>
+                <version>${sqlite.jdbc.version}</version>
+            </dependency>
+            <!-- sqlite end -->
         </dependencies>
     </dependencyManagement>
 
