@@ -6,7 +6,7 @@ spring:
   datasource:
     druid:
       driver-class-name: org.sqlite.JDBC
-      url: jdbc:sqlite:resource:data/demo.db
+      url: jdbc:sqlite::resource:data/data.db
       username:
       password:
       initial-size: 1
