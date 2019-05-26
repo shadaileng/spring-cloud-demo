@@ -16,7 +16,7 @@ spring:
 
 mybatis:
   configuration:
-    use-generated-keys: true
+#    use-generated-keys: true
     cache-enabled: false
 
 
