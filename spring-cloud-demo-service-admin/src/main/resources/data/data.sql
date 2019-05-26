@@ -1,6 +1,6 @@
 CREATE TABLE user
 (
-            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	user_code varchar(100) NOT NULL, -- '用户编码 
 	login_code varchar(100) NOT NULL, -- '登录账号 
 	user_name varchar(100) NOT NULL, -- '用户昵称 

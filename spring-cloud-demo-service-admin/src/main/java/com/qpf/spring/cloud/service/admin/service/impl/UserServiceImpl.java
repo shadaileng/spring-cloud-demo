@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,6 +23,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) {
+        String now = new SimpleDateFormat("YYYYmmDDHHMMSS").format(new Date());
+        user.setCreateDate(now);
+        user.setUpdateDate(now);
         int insert = userMapper.insert(user);
         if (insert > 0) {
             Example example = new Example(User.class);
