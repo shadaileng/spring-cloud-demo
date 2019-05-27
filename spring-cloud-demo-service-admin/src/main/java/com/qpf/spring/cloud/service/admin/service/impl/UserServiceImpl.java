@@ -3,6 +3,7 @@ package com.qpf.spring.cloud.service.admin.service.impl;
 import com.qpf.spring.cloud.service.admin.entity.User;
 import com.qpf.spring.cloud.service.admin.mapper.UserMapper;
 import com.qpf.spring.cloud.service.admin.service.UserService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -39,6 +40,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(String loginCode, String password) {
+        Example example = new Example(User.class);
+        example.createCriteria().andEqualTo("loginCode", loginCode);
+        User user = userMapper.selectOneByExample(example);
+
+        if (user != null) {
+            if (StringUtils.equals(user.getPassword(), password)) {
+                return user;
+            }
+        }
+
         return null;
     }
 }
