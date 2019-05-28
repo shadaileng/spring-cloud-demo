@@ -298,5 +298,7 @@
         <module>../spring-cloud-demo-config</module>
         <module>../spring-cloud-demo-zipkin</module>
         <module>../spring-cloud-demo-admin</module>
+        <module>../spring-cloud-demo-commons</module>
+        <module>../spring-cloud-demo-commons-service</module>
     </modules>
 </project>

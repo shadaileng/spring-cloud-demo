@@ -6,8 +6,10 @@ import com.qpf.spring.cloud.service.admin.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,9 +26,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) {
-        String now = new SimpleDateFormat("YYYYmmDDHHMMSS").format(new Date());
+        String now = new SimpleDateFormat("YYYYMMddHHmmssSSS").format(new Date());
         user.setCreateDate(now);
         user.setUpdateDate(now);
+        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
         int insert = userMapper.insert(user);
         if (insert > 0) {
             Example example = new Example(User.class);
@@ -45,7 +48,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.selectOneByExample(example);
 
         if (user != null) {
-            if (StringUtils.equals(user.getPassword(), password)) {
+            if (StringUtils.equals(user.getPassword(), DigestUtils.md5DigestAsHex(password.getBytes()))) {
                 return user;
             }
         }

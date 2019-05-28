@@ -1,9 +1,12 @@
-package com.qpf.spring.cloud.service.admin.service.test;
+package com.qpf.spring.cloud.service.admin.test.service;
 
 import com.qpf.spring.cloud.service.admin.entity.User;
 import org.junit.Test;
+import org.springframework.util.DigestUtils;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class UserTest {
     @Test
@@ -35,6 +38,8 @@ public class UserTest {
         System.out.println(a);
         System.out.println(b);
         System.out.println(c);
+        System.out.println(new SimpleDateFormat("YYYYMMddHHmmssSSS").format(new Date()));
+        System.out.println(DigestUtils.md5DigestAsHex(new SimpleDateFormat("YYYYMMddHHmmssSSS").format(new Date()).getBytes()));
     }
 
     private String camelToUnderline(String param) {

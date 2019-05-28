@@ -17,6 +17,11 @@
     <name>spring-cloud-demo-service-admin</name>
 
     <dependencies>
+        <dependency>
+            <groupId>com.qpf</groupId>
+            <artifactId>spring-cloud-demo-commons-service</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <!-- Spring Boot Begin -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -24,41 +29,6 @@
             <scope>test</scope>
         </dependency>
         <!-- Spring Boot End -->
-        <!-- Spring Boot DataAccess begin -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>tk.mybatis</groupId>
-            <artifactId>mapper-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-        </dependency>
-        <!-- Spring Boot DataAccess End -->
-        <!-- Sqlite Begin -->
-        <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-        </dependency>
-        <!-- Sqlite End -->
-
-        <!-- Spring Cloud Begin -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-zipkin</artifactId>
-        </dependency>
-        <!-- Spring Cloud End -->
     </dependencies>
 
     <build>

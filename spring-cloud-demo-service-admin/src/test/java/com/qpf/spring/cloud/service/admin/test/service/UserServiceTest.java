@@ -1,4 +1,4 @@
-package com.qpf.spring.cloud.service.admin.service.test;
+package com.qpf.spring.cloud.service.admin.test.service;
 
 import com.qpf.spring.cloud.service.admin.ServiceAdminApplication;
 import com.qpf.spring.cloud.service.admin.entity.User;
@@ -16,11 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.reflect.Field;
 import java.util.List;
 
-@ActiveProfiles("dev")
+@ActiveProfiles("prod")
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {ServiceAdminApplication.class})
-@Rollback
-@Transactional
+//@Rollback
+//@Transactional
 public class UserServiceTest {
     @Autowired
     private UserService userService;
@@ -28,10 +28,10 @@ public class UserServiceTest {
     @Test
     public void testRegister() {
         User user = new User();
-        user.setUserName("0002");
-        user.setPassword("0002");
-        user.setUserCode("0002");
-        user.setLoginCode("0002");
+        user.setUserName("0001");
+        user.setPassword("123456");
+        user.setUserCode("0001");
+        user.setLoginCode("0001");
         user.setMobile("13800000000");
         user.setPhone("13800000000");
         user.setSex("1");
@@ -47,7 +47,7 @@ public class UserServiceTest {
     }
     @Test
     public void testLogin() {
-        User login = userService.login("0001", "0001");
+        User login = userService.login("0001", "123456");
         Assert.assertNotNull(login);
         System.out.println(login);
     }
