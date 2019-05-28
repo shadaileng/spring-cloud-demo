@@ -19,8 +19,8 @@ import java.util.List;
 @ActiveProfiles("prod")
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {ServiceAdminApplication.class})
-//@Rollback
-//@Transactional
+@Rollback
+@Transactional
 public class UserServiceTest {
     @Autowired
     private UserService userService;
