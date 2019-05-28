@@ -19,7 +19,6 @@ mybatis:
     use-generated-keys: true
     cache-enabled: false
 
-
 server:
   port: 8861
 

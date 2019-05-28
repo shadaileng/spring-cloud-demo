@@ -1,4 +1,4 @@
-ipaddr: 10.254.198.150
+ipaddr: 116.85.54.176
 spring:
   application:
     name: spring-cloud-demo-service-admin
@@ -14,6 +14,11 @@ spring:
       min-idle: 1
       max-active: 20
       test-on-borrow: true
+
+mybatis:
+  configuration:
+    use-generated-keys: true
+    cache-enabled: false
 
 server:
   port: 8861
