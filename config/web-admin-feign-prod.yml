@@ -11,7 +11,7 @@ spring:
   zipkin:
     base-url: http://${ipaddr}:9411
 server:
-  port: 8765
+  port: 8961
 
 feign:
   hystrix:
