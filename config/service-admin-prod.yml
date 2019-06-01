@@ -1,4 +1,5 @@
 ipaddr: 116.85.54.176
+ipreg: localhost
 spring:
   application:
     name: spring-cloud-demo-service-admin
@@ -28,9 +29,9 @@ eureka:
     # 注册时使用ip而不是主机名
     prefer-ip-address: true
     # 注册的实例名
-    instance-id: ${ipaddr}:${server.port}
+    instance-id: ${ipreg}:${server.port}
     # 指定此实例的ip
-    ip-address: ${ipaddr}
+    ip-address: ${ipreg}
   client:
     serviceUrl:
       defaultZone: http://${ipaddr}:8761/eureka/
