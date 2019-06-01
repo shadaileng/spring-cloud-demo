@@ -1,4 +1,4 @@
-ipaddr: 10.254.198.150
+ipaddr: 116.85.54.176
 spring:
   application:
     name: spring-cloud-demo-web-admin-feign
