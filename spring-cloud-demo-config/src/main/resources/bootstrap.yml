@@ -3,7 +3,7 @@ spring:
     name: spring-cloud-demo-config
   cloud:
     config:
-      label: master
+      label: dev
       server:
         git:
           uri: https://github.com/shadaileng/spring-cloud-demo.git
@@ -16,6 +16,10 @@ eureka:
   instance:
     # 注册时使用ip而不是主机名
     prefer-ip-address: true
+    # 注册的实例名
+    instance-id: localhost:${server.port}
+    # 指定此实例的ip
+    ip-address: localhost
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka

@@ -1,7 +1,7 @@
 spring:
   cloud:
     config:
-      uri: http://10.254.198.150:8888
-      label: master
-      name: zipkin
+      uri: http://116.85.54.176:8888
+      label: dev
+      name: commons-eureka, commons-admin, zipkin
       profile: prod

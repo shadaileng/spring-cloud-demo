@@ -2,6 +2,6 @@ spring:
   cloud:
     config:
       uri: http://10.254.198.150:8888
-      label: master
-      name: eureka
+      name: commons-eureka, commons-admin, commons-zipkin, eureka
+      label: dev
       profile: prod

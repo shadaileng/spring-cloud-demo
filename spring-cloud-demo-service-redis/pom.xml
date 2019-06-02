@@ -11,10 +11,10 @@
         <relativePath>../spring-cloud-demo-dependencies/pom.xml</relativePath>
     </parent>
 
-    <artifactId>spring-cloud-demo-commons-service</artifactId>
+    <artifactId>spring-cloud-demo-commons-service-redis</artifactId>
     <packaging>jar</packaging>
 
-    <name>spring-cloud-demo-commons-service</name>
+    <name>spring-cloud-demo-commons-service-redis</name>
 
     <dependencies>
         <!-- Project Begin -->
@@ -24,27 +24,16 @@
             <version>${project.parent.version}</version>
         </dependency>
         <!-- Project End -->
-        <!-- Spring Boot DataAccess begin -->
+        <!-- Redis Begin -->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
         </dependency>
         <dependency>
-            <groupId>tk.mybatis</groupId>
-            <artifactId>mapper-spring-boot-starter</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-        </dependency>
-        <!-- Spring Boot DataAccess End -->
-        <!-- Sqlite Begin -->
-        <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-        </dependency>
-        <!-- Sqlite End -->
-
+        <!-- Redis End -->
     </dependencies>
 
     <build>

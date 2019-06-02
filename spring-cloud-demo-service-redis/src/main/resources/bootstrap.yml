@@ -2,6 +2,6 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
-      name: commons-eureka, commons-admin, commons-zipkin, zuul
+      name: commons-eureka, commons-admin, commons-zuul, service-redis
       label: dev
       profile: dev

@@ -2,6 +2,6 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
-      label: master
-      name: admin
+      name: commons-eureka, commons-admin, commons-zipkin, admin
+      label: dev
       profile: dev

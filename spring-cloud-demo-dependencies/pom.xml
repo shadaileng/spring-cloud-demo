@@ -322,5 +322,6 @@
         <module>../spring-cloud-demo-commons-service</module>
         <module>../spring-cloud-demo-commons-domain</module>
         <module>../spring-cloud-demo-commons-web</module>
+        <module>../spring-cloud-demo-service-redis</module>
     </modules>
 </project>
