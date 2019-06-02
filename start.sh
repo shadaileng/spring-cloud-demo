@@ -65,7 +65,7 @@ list(){
     for i in ${moduls[*]}; do
         jar=spring-cloud-demo-$i/target/spring-cloud-demo-$i-0.0.1-SNAPSHOT.jar
         pid=$(ps -aux | grep $jar | grep -v grep | awk '{print $2}')
-        _profile=$(ps -aux | grep $jar | grep -v grep | awk '{print $(NF-1)}' | awk -F'=' '{print $NF}')
+        _profile=$(ps -aux | grep $jar | grep -v grep | awk '{print $(NF)}' | awk -F'=' '{print $NF}')
 #        echo $pid $jar
         if [ -n "$pid" ];then
             port=$(lsof -p $pid | grep LISTEN | awk '{print $(NF-1)}' | awk -F':' '{print $NF}')
