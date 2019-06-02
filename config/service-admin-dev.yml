@@ -23,6 +23,13 @@ server:
   port: 8861
 
 eureka:
+  instance:
+    # 注册时使用ip而不是主机名
+    prefer-ip-address: true
+    # 注册的实例名
+    instance-id: localhost:8761
+    # 指定此实例的ip
+    ip-address: localhost
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
