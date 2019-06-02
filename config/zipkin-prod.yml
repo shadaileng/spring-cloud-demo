@@ -5,3 +5,8 @@ spring:
     name: spring-cloud-demo-zipkin
 server:
   port: 9411
+management:
+  metrics:
+    web:
+      server:
+        auto-time-requests: false
