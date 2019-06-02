@@ -1,28 +1,27 @@
 ipaddr: 116.85.54.176
 ipreg: localhost
+server:
+  port: 8861
 spring:
   application:
     name: spring-cloud-demo-service-admin
   zipkin:
     base-url: http://${ipaddr}:9411
-  datasource:
-    druid:
-      driver-class-name: org.sqlite.JDBC
-      url: jdbc:sqlite::resource:data/demo.db
-      username:
-      password:
-      initial-size: 1
-      min-idle: 1
-      max-active: 20
-      test-on-borrow: true
-
-mybatis:
-  configuration:
-    use-generated-keys: true
-    cache-enabled: false
-
-server:
-  port: 8861
+#  datasource:
+#    druid:
+#      driver-class-name: org.sqlite.JDBC
+#      url: jdbc:sqlite::resource:data/demo.db
+#      username:
+#      password:
+#      initial-size: 1
+#      min-idle: 1
+#      max-active: 20
+#      test-on-borrow: true
+#
+#mybatis:
+#  configuration:
+#    use-generated-keys: true
+#    cache-enabled: false
 
 #eureka:
 #  instance:
