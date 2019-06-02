@@ -5,8 +5,8 @@ server:
 spring:
   application:
     name: spring-cloud-demo-service-admin
-  zipkin:
-    base-url: http://${ipaddr}:9411
+#  zipkin:
+#    base-url: http://${ipaddr}:9411
 #  datasource:
 #    druid:
 #      driver-class-name: org.sqlite.JDBC

@@ -1,5 +1,3 @@
-ipaddr: 116.85.54.176
-ipreg: localhost
 eureka:
   instance:
     # 注册时使用ip而不是主机名

@@ -1,30 +1,9 @@
-ipaddr: 10.254.198.150
+ipaddr: 116.85.54.176
+ipreg: localhost
 spring:
   application:
     name: spring-cloud-demo-admin
-  zipkin:
-    base-url: http://${ipaddr}:9411
 
 server:
   port: 8084
 
-management:
-  endpoint:
-    health:
-      show-details: always
-  endpoints:
-    web:
-      exposure:
-        include: health,info
-
-eureka:
-  instance:
-    # 注册时使用ip而不是主机名
-    prefer-ip-address: true
-    # 注册的实例名
-    instance-id: ${ipaddr}:${server.port}
-    # 指定此实例的ip
-    ip-address: ${ipaddr}
-  client:
-    serviceUrl:
-      defaultZone: http://${ipaddr}:8761/eureka/
