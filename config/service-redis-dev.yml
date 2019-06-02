@@ -1,0 +1,15 @@
+ipaddr: localhost
+ipreg: localhost
+server:
+  port: 8800
+spring:
+  application:
+    name: spring-cloud-demo-service-redis
+  redis:
+    host:${ipaddr}:6379
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: -1ms
+        min-idle: 0
