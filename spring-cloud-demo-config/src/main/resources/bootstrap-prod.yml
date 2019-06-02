@@ -1,5 +1,5 @@
 ipaddr: 116.85.54.176
-ipreg: 116.85.54.176
+ipreg: ${ipaddr}
 spring:
   application:
     name: spring-cloud-demo-config
