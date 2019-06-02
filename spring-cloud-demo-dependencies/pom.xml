@@ -320,5 +320,7 @@
         <module>../spring-cloud-demo-admin</module>
         <module>../spring-cloud-demo-commons</module>
         <module>../spring-cloud-demo-commons-service</module>
+        <module>../spring-cloud-demo-commons-domain</module>
+        <module>../spring-cloud-demo-commons-web</module>
     </modules>
 </project>

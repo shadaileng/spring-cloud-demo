@@ -1,7 +1,7 @@
 package com.qpf.spring.cloud.service.admin.test.service;
 
 import com.qpf.spring.cloud.service.admin.ServiceAdminApplication;
-import com.qpf.spring.cloud.service.admin.entity.User;
+import com.qpf.spring.cloud.commons.domain.User;
 import com.qpf.spring.cloud.service.admin.service.UserService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,7 +13,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 @ActiveProfiles("prod")

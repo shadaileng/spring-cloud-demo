@@ -1,6 +1,6 @@
 package com.qpf.spring.cloud.service.admin.service;
 
-import com.qpf.spring.cloud.service.admin.entity.User;
+import com.qpf.spring.cloud.commons.domain.User;
 
 import java.util.List;
 

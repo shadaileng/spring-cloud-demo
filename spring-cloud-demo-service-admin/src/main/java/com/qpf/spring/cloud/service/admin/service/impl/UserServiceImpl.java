@@ -1,7 +1,7 @@
 package com.qpf.spring.cloud.service.admin.service.impl;
 
-import com.qpf.spring.cloud.service.admin.entity.User;
-import com.qpf.spring.cloud.service.admin.mapper.UserMapper;
+import com.qpf.spring.cloud.commons.domain.User;
+import com.qpf.spring.cloud.commons.mapper.UserMapper;
 import com.qpf.spring.cloud.service.admin.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.nio.charset.Charset;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +16,10 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
+//    @Autowired
+//    public UserServiceImpl(UserMapper userMapper) {
+//        this.userMapper = userMapper;
+//    }
 
     @Override
     public List<User> selectAll() {

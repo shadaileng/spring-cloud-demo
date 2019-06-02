@@ -11,26 +11,21 @@
         <relativePath>../spring-cloud-demo-dependencies/pom.xml</relativePath>
     </parent>
 
-    <artifactId>spring-cloud-demo-commons</artifactId>
+    <artifactId>spring-cloud-demo-commons-domain</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>spring-cloud-demo-commons</name>
+    <name>spring-cloud-demo-commons-domain</name>
 
     <dependencies>
+        <!-- Project Begin -->
+<!--        <dependency>-->
+<!--            <groupId>com.qpf</groupId>-->
+<!--            <artifactId>spring-cloud-demo-commons</artifactId>-->
+<!--            <version>${project.parent.version}</version>-->
+<!--        </dependency>-->
+        <!-- Project End -->
         <!-- Spring Cloud Begin -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-zipkin</artifactId>
-        </dependency>
         <!-- Spring Cloud End -->
 
         <!-- lombok begin -->
@@ -40,12 +35,17 @@
             <scope>provided</scope>
         </dependency>
         <!-- lombok end -->
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>1.0</version>
+        </dependency>
 
         <!-- jackson begin -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
+<!--            <artifactId>jackson-databind</artifactId>-->
+<!--        </dependency>-->
         <!-- jackson end -->
     </dependencies>
 
