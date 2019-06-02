@@ -6,7 +6,7 @@ spring:
   application:
     name: spring-cloud-demo-service-redis
   redis:
-    host: ${ipaddr}:6379
+    host: ${ipaddr}
     lettuce:
       pool:
         max-active: 8
