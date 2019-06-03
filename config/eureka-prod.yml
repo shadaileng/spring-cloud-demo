@@ -1,9 +1,8 @@
-ipaddr: 10.254.198.150 
+ipaddr: 116.85.54.176
+ipreg: localhost
 spring:
   application:
     name: spring-cloud-demo-eureka
-  zipkin:
-    base-url: http://${ipaddr}:9411
 server:
   port: 8761
 
@@ -13,5 +12,3 @@ eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
-    serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/

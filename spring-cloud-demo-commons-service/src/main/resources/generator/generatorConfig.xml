@@ -25,14 +25,14 @@
         </jdbcConnection>
 
         <!-- 配置实体类存放路径 -->
-        <javaModelGenerator targetPackage="com.qpf.spring.cloud.service.admin.entity" targetProject="src/main/java"/>
+        <javaModelGenerator targetPackage="com.qpf.spring.cloud.commons.domain" targetProject="src/main/java"/>
 
         <!-- 配置 XML 存放路径 -->
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
 
         <!-- 配置 DAO 存放路径 -->
         <javaClientGenerator
-                targetPackage="com.qpf.spring.cloud.service.admin.mapper"
+                targetPackage="com.qpf.spring.cloud.commons.mapper"
                 targetProject="src/main/java"
                 type="XMLMAPPER"/>
 

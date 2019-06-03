@@ -3,10 +3,6 @@ spring:
     name: spring-cloud-demo-zipkin
 server:
   port: 9411
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
 management:
   metrics:
     web:

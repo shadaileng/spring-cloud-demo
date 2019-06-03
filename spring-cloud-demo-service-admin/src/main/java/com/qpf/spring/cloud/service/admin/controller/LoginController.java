@@ -1,7 +1,7 @@
 package com.qpf.spring.cloud.service.admin.controller;
 
 import com.qpf.spring.cloud.commons.dto.BaseResult;
-import com.qpf.spring.cloud.service.admin.entity.User;
+import com.qpf.spring.cloud.commons.domain.User;
 import com.qpf.spring.cloud.service.admin.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class LoginController {
         if (login != null) {
             result = BaseResult.OK(login, "登陆成功");
         } else {
-            result = BaseResult.ER("登陆失败,登陆账号或者密码错误");
+            result = BaseResult.ER("登陆失败: 登录帐号或者密码错误");
         }
         return result;
     }

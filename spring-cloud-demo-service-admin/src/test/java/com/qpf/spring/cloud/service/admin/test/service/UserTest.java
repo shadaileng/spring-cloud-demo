@@ -1,6 +1,6 @@
 package com.qpf.spring.cloud.service.admin.test.service;
 
-import com.qpf.spring.cloud.service.admin.entity.User;
+import com.qpf.spring.cloud.commons.domain.User;
 import org.junit.Test;
 import org.springframework.util.DigestUtils;
 
@@ -43,7 +43,7 @@ public class UserTest {
     }
 
     private String camelToUnderline(String param) {
-        StringBuffer line = new StringBuffer();
+        StringBuilder line = new StringBuilder();
 
         for (char c: param.toCharArray()) {
             if (Character.isUpperCase(c) || Character.isDigit(c)) {

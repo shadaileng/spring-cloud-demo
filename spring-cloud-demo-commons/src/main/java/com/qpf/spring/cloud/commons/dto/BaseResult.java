@@ -1,6 +1,7 @@
 package com.qpf.spring.cloud.commons.dto;
 
 import lombok.Data;
+import lombok.Setter;
 
 import java.util.Arrays;
 import java.util.List;

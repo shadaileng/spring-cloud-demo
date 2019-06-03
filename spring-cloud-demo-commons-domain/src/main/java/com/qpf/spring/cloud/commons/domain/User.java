@@ -1,4 +1,4 @@
-package com.qpf.spring.cloud.service.admin.entity;
+package com.qpf.spring.cloud.commons.domain;
 
 import javax.persistence.*;
 

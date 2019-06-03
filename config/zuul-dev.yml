@@ -1,14 +1,8 @@
 spring:
   application:
     name: spring-cloud-demo-zuul
-  zipkin:
-    base-url: http://localhost:9411
 server:
   port: 8769
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
 zuul:
   routes:
     api-a:

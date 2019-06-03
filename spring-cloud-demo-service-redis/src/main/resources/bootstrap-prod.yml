@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    config:
+      uri: http://116.85.54.176:8888
+      name: commons-eureka, commons-admin, commons-zipkin, service-redis
+      label: dev
+      profile: prod
+#  redis:
+#    database: 0

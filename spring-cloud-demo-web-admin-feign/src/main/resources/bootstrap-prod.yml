@@ -1,7 +1,7 @@
 spring:
   cloud:
     config:
-      uri: http://10.254.198.150:8888
-      label: master
-      name: web-admin-feign
+      uri: http://116.85.54.176:8888
+      name: commons-eureka, commons-admin, commons-zipkin, commons-web, web-admin-feign
+      label: dev
       profile: prod

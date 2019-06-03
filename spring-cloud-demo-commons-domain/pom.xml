@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.qpf</groupId>
+        <artifactId>spring-cloud-demo-dependencies</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../spring-cloud-demo-dependencies/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>spring-cloud-demo-commons-domain</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>spring-cloud-demo-commons-domain</name>
+
+    <dependencies>
+        <!-- Project Begin -->
+<!--        <dependency>-->
+<!--            <groupId>com.qpf</groupId>-->
+<!--            <artifactId>spring-cloud-demo-commons</artifactId>-->
+<!--            <version>${project.parent.version}</version>-->
+<!--        </dependency>-->
+        <!-- Project End -->
+        <!-- Spring Cloud Begin -->
+        <!-- Spring Cloud End -->
+
+        <!-- lombok begin -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- lombok end -->
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!-- jackson begin -->
+<!--        <dependency>-->
+<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
+<!--            <artifactId>jackson-databind</artifactId>-->
+<!--        </dependency>-->
+        <!-- jackson end -->
+    </dependencies>
+
+</project>

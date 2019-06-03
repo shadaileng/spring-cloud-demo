@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qpf.spring.cloud.service.admin.mapper.UserMapper">
-  <resultMap id="BaseResultMap" type="com.qpf.spring.cloud.service.admin.entity.User">
+<mapper namespace="com.qpf.spring.cloud.commons.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.qpf.spring.cloud.commons.domain.User">
     <!--
       WARNING - @mbg.generated
     -->
