@@ -26,7 +26,7 @@ public class LoginController {
         if (login != null) {
             result = BaseResult.OK(login, "登陆成功");
         } else {
-            result = BaseResult.ER("登陆失败");
+            result = BaseResult.ER("登陆失败,登陆账号或者密码错误");
         }
         return result;
     }
