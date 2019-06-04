@@ -27,6 +27,12 @@
         </dependency>
         <!-- Project End -->
         <!-- Spring Cloud Begin -->
+        <!-- Spring Boot Begin -->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-json</artifactId>-->
+        <!--</dependency>-->
+        <!-- Spring Boot End -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
