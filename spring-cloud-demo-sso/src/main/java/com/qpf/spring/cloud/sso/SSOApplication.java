@@ -13,7 +13,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableDiscoveryClient
 // 服务提供者
 @EnableEurekaClient
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.qpf.spring.cloud", "com.qpf.spring.cloud.commons.mapper"})
 public class SSOApplication {
     public static void main(String[] args) {
         SpringApplication.run(SSOApplication.class, args);

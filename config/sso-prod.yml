@@ -5,17 +5,17 @@ server:
 spring:
   application:
     name: spring-cloud-demo-sso
-  thymeleaf:
-    encoding: UTF-8
-    cache: false
-    servlet:
-      content-type: text/html
+#  thymeleaf:
+#    encoding: UTF-8
+#    cache: false
+#    servlet:
+#      content-type: text/html
 #  zipkin:
 #    base-url: http://${ipaddr}:9411
-
-feign:
-  hystrix:
-    enabled: true
+#
+#feign:
+#  hystrix:
+#    enabled: true
 
 #eureka:
 #  instance:

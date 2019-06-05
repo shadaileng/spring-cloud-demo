@@ -6,12 +6,15 @@ import com.qpf.spring.cloud.service.redis.service.RedisService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class RedisController {
 
+    private final static Logger logger = LoggerFactory.getLogger(RedisController.class);
     private RedisService redisService;
 
     @Autowired
@@ -30,8 +33,16 @@ public class RedisController {
             @PathVariable(value = "key", required = true) String key,
             @PathVariable(value = "value", required = true) Object value,
             @PathVariable(value = "timeOut", required = true) long timeOut) throws Exception {
-        redisService.set(key, value, timeOut);
-        return JsonUtils.obj2json(BaseResult.OK());
+        BaseResult result = null;
+        try {
+            redisService.set(key, value, timeOut);
+            result = BaseResult.OK();
+        } catch (Exception e) {
+            logger.error("Error: {}", e.getMessage());
+            result = BaseResult.ER(e.getMessage());
+        }
+
+        return JsonUtils.obj2json(result);
     }
 
     @ApiOperation("根据键获取值")
@@ -40,7 +51,13 @@ public class RedisController {
     })
     @GetMapping("get/{key}")
     public String get(@PathVariable(value = "key", required = true) String key) throws Exception {
-        BaseResult result = BaseResult.OK(redisService.get(key));
+        BaseResult result = null;
+        try {
+            result = BaseResult.OK(redisService.get(key));
+        } catch (Exception e) {
+            logger.error("Error: {}", e.getMessage());
+            result = BaseResult.ER(e.getMessage());
+        }
         return JsonUtils.obj2json(result);
     }
 }
