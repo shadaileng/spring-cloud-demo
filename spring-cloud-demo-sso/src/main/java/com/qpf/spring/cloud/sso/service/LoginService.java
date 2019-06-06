@@ -1,6 +1,7 @@
 package com.qpf.spring.cloud.sso.service;
 
 import com.qpf.spring.cloud.commons.domain.User;
+import com.qpf.spring.cloud.commons.dto.BaseResult;
 
 public interface LoginService {
 
@@ -9,7 +10,7 @@ public interface LoginService {
      * @param user
      * @return
      */
-    User register(User user);
+    BaseResult register(User user);
 
     /**
      * 登陆

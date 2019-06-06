@@ -1,6 +1,7 @@
 package com.qpf.spring.cloud.sso.test.service;
 
 import com.qpf.spring.cloud.commons.domain.User;
+import com.qpf.spring.cloud.commons.dto.BaseResult;
 import com.qpf.spring.cloud.sso.service.LoginService;
 import com.qpf.spring.cloud.sso.SSOApplication;
 import org.junit.Assert;
@@ -39,8 +40,8 @@ public class LoginServiceTest {
         user.setCorpName("Bank");
         user.setCreateBy("1");
         user.setUpdateBy("1");
-        User register = loginService.register(user);
-        Assert.assertEquals(user.getLoginCode(), register.getLoginCode());
+        BaseResult result = loginService.register(user);
+        Assert.assertTrue(result.getResult());
     }
     @Test
     public void testLogin() {
