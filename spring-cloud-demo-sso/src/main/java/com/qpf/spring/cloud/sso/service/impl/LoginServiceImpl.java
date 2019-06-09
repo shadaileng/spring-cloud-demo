@@ -5,7 +5,6 @@ import com.qpf.spring.cloud.commons.dto.BaseResult;
 import com.qpf.spring.cloud.commons.mapper.UserMapper;
 import com.qpf.spring.cloud.sso.service.LoginService;
 import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.annotations.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +15,16 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
-public class UserServiceImpl implements LoginService {
+public class LoginServiceImpl implements LoginService {
 
-    private final static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
 
     private UserMapper userMapper;
     @Autowired
-    public UserServiceImpl(UserMapper userMapper) {
+    public LoginServiceImpl(UserMapper userMapper) {
         this.userMapper = userMapper;
     }
 

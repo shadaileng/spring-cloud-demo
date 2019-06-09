@@ -7,8 +7,10 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import tk.mybatis.spring.annotation.MapperScan;
 
+@EnableSwagger2
 @EnableHystrixDashboard
 // 服务消费者
 @EnableFeignClients

@@ -36,7 +36,7 @@
         <div class="callout callout-danger" th:if="${msg != null}">
             <p th:utext="${msg}"></p>
         </div>
-        <form action="login" method="post">
+        <form action="v1/api/login" method="post">
             <div class="form-group has-feedback">
                 <input name="loginCode" type="loginCode" class="form-control" placeholder="Email" th:value="${email}">
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -58,7 +58,7 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-xs-4">
-                    <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                    <button id="login" type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
                 </div>
                 <!-- /.col -->
             </div>
@@ -84,6 +84,30 @@
             increaseArea: '20%' /* optional */
         });
         document.body.parentNode.style.overflow = "hidden";
+        $('#login').on('click', function (e) {
+            let $form = $(e.target).parents().filter('form')
+            let url = $form.attr('action')
+            console.log('url:', url)
+            $.ajax({
+                url: url,
+                data: $form.serialize(),
+                type: 'POST',
+                beforeSend: function () {
+
+                },
+                success: function (result) {
+                    if (result.result) {
+                        console.log('data:', result.data)
+                    } else {
+                        console.log('msg:', result.message)
+                    }
+                },
+                error: function () {
+
+                }
+            })
+            return false
+        })
     });
 </script>
 </html>

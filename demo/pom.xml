@@ -11,10 +11,10 @@
         <relativePath>../spring-cloud-demo-dependencies/pom.xml</relativePath>
     </parent>
 
-    <artifactId>spring-cloud-demo-service-redis</artifactId>
+    <artifactId>demo</artifactId>
     <packaging>jar</packaging>
 
-    <name>spring-cloud-demo-service-redis</name>
+    <name>demo</name>
 
     <dependencies>
         <!-- Project Begin -->
@@ -25,19 +25,29 @@
         </dependency>
         <!-- Project End -->
         <!-- Redis Begin -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.commons</groupId>-->
+<!--            <artifactId>commons-pool2</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
         <!-- Redis End -->
+        <!-- Swagger2 Begin -->
+<!--        <dependency>-->
+<!--            <groupId>io.springfox</groupId>-->
+<!--            <artifactId>springfox-swagger2</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>io.springfox</groupId>-->
+<!--            <artifactId>springfox-swagger-ui</artifactId>-->
+<!--        </dependency>-->
+        <!-- Swagger2 End -->
     </dependencies>
 
     <build>

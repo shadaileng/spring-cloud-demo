@@ -5,3 +5,8 @@ spring:
       name: commons-eureka, commons-admin, commons-zipkin, commons-service, commons-web, sso
       label: dev
       profile: dev
+  redis:
+    timeout: 10000
+eureka:
+  server:
+    peer-node-read-timeout-ms: 200000

@@ -5,5 +5,3 @@ spring:
       name: commons-eureka, commons-admin, commons-zipkin, service-redis
       label: dev
       profile: prod
-#  redis:
-#    database: 0

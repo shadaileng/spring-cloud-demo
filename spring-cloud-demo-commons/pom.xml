@@ -32,6 +32,10 @@
             <!--<groupId>org.springframework.boot</groupId>-->
             <!--<artifactId>spring-boot-starter-json</artifactId>-->
         <!--</dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <!-- Spring Boot End -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -61,6 +65,29 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
         <!-- jackson end -->
+        <!-- Swagger2 Begin -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+        </dependency>
+        <!-- Swagger2 End -->
+        <!-- Guava Begin -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <!-- Guava End -->
+        <!-- Servlet Begin -->
+<!--        <dependency>-->
+<!--            <groupId>javax.servlet</groupId>-->
+<!--            <artifactId>javax.servlet-api</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+        <!-- Servlet End -->
     </dependencies>
 
 </project>

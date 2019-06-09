@@ -1,5 +1,5 @@
 ipaddr: 116.85.54.176
-ipreg: localhost
+ipreg: 116.85.54.176
 server:
   port: 8800
 spring:
@@ -12,10 +12,14 @@ spring:
     # 远程服务器端口
     port: 6379
     # 链接超时时间(毫秒)
-    timeout: 5000
+    timeout: 10000
     lettuce:
       pool:
+        # 连接池最大连接数(使用负值表示没有限制)默认 8
         max-active: 8
+        # 连接池最大阻塞等待时间(使用负值表示没有限制) 默认 -1
+        max-wait: -1
+        # 连接池中的最大空闲连接 默认 8
         max-idle: 8
-        max-wait: -1ms
+        # 连接池中的最小空闲连接 默认 0
         min-idle: 0
