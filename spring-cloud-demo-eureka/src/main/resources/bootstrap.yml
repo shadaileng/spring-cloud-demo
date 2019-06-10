@@ -1,7 +1,21 @@
 spring:
+    profiles:
+        active: dev
+---
+spring:
+  profiles: dev
   cloud:
     config:
       uri: http://localhost:8888
       label: dev
       name: eureka
       profile: dev
+---
+spring:
+  profiles: prod
+  cloud:
+    config:
+      uri: http://10.254.198.150:8888
+      name: commons-eureka, commons-admin, commons-zipkin, eureka
+      label: dev
+      profile: prod

@@ -1,4 +1,9 @@
 spring:
+    profiles:
+        active: dev
+---
+spring:
+  profiles: dev
   application:
     name: spring-cloud-demo-config
   cloud:
@@ -23,6 +28,43 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+---
+ipaddr: 116.85.54.176
+ipreg: ${ipaddr}
+spring:
+  profiles: prod
+  application:
+    name: spring-cloud-demo-config
+  cloud:
+    config:
+      label: master
+      server:
+        git:
+          uri: https://github.com/shadaileng/spring-cloud-demo.git
+          search-paths: config
+  zipkin:
+    base-url: http://${ipaddr}:9411
+server:
+  port: 8888
+eureka:
+  instance:
+      # 注册时使用ip而不是主机名
+      prefer-ip-address: true
+      # 注册的实例名
+      instance-id: ${ipreg}:${server.port}
+      # 指定此实例的ip
+      ip-address: ${ipreg}
+  client:
+    serviceUrl:
+      defaultZone: http://${ipaddr}:8761/eureka
 management:
   endpoint:
     health:
