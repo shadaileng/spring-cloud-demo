@@ -1,7 +1,0 @@
-spring:
-  cloud:
-    config:
-      uri: http://116.85.54.176:8888
-      label: dev
-      name: commons-eureka, commons-admin, zipkin
-      profile: prod
