@@ -38,7 +38,7 @@
         </div>
         <form action="v1/api/login" method="post">
             <div class="form-group has-feedback">
-                <input name="loginCode" type="loginCode" class="form-control" placeholder="Email" th:value="${email}">
+                <input name="loginCode" type="loginCode" class="form-control" placeholder="Email" th:value="${loginCode}" th:attr="data-name=${username}, data-url=${url}">
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
@@ -97,7 +97,14 @@
                 },
                 success: function (result) {
                     if (result.result) {
-                        console.log('data:', result.data)
+                        let user = result.data
+                        logined(user.loginCode, user.userName, $form)
+
+                        // let loginCode = $form.find('input[name="loginCode"]')
+                        // loginCode.val(user.loginCode).attr('disabled', true)
+                        // let password = $form.find('input[name="password"]')
+                        // password.val('').attr('disabled', true)
+                        // $form.prev('p').html('欢迎用户[' + user.userName + ']登陆').css('background', '#7bed9f')
                     } else {
                         console.log('msg:', result.message)
                     }
@@ -108,6 +115,23 @@
             })
             return false
         })
+        let code = $('input[name="loginCode"]').val()
+        if (code != null && code != undefined && code != '') {
+            let name = $('input[name="loginCode"]').data('name')
+            logined(code, name, $('form'))
+        }
     });
+    function logined(loginCode, username, form) {
+        let loginCode_ = form.find('input[name="loginCode"]')
+        loginCode_.val(loginCode).attr('disabled', true)
+        let password = form.find('input[name="password"]')
+        password.val('').attr('disabled', true)
+        form.prev('p').html('欢迎用户[' + username + ']登陆').css('background', '#7bed9f')
+        $('#login').attr('disabled', true)
+        let url = $('input[name="loginCode"]').data('url')
+        if (url != null && url != undefined && url != '') {
+            location.assign(location.href + '?url=' + url)
+        }
+    }
 </script>
 </html>
