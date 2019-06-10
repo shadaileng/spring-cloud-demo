@@ -3,7 +3,7 @@
 res="resources"
 DOCKERIZE_VERSION=v0.6.1
 
-moduls=("config" "eureka" "admin" "zipkin" "zuul" "service-admin" "web-admin-feign" "web-admin-ribbon")
+moduls=("config" "eureka" "admin" "service-redis" "ipkin" "zuul" "service-admin" "web-admin-feign" "web-admin-ribbon")
 start(){
     for i in ${moduls[*]}; do
         startone $i
@@ -49,7 +49,8 @@ startone(){
             if [ -n "$pid" ];then
                 echo -e "\033[32m$1 Up $pid\033[0m" 
             else
-                nohup java -Xmx128m -Xss256k -Xms64m -jar $jar $_profile >> nohup-$1.out 2>&1 &
+                # nohup java -Xmx256m -Xss256k -Xms128m -jar $jar $_profile >> nohup-$1.out 2>&1 &
+                nohup java -Xms32m -Xmx64m -jar $jar $_profile >> nohup-$1.out 2>&1 &
                 echo -e "\033[33mstarting $1 $_profile\033[0m"
             fi
         else
@@ -70,7 +71,8 @@ list(){
         _profile=$(ps -aux | grep $jar | grep spring.profiles.active | grep -v grep | awk '{print $(NF)}' | awk -F'=' '{print $NF}')
 #        echo $pid $jar
         if [ -n "$pid" ];then
-            port=$(lsof -p $pid | grep LISTEN | awk '{print $(NF-1)}' | awk -F':' '{print $NF}')
+#            port=$(lsof -p $pid | grep LISTEN | awk '{print $(NF-1)}' | awk -F':' '{print $NF}')
+            port=$(lsof -i | grep LISTEN | grep $pid | awk '{print $(NF-1)}' | awk -F':' '{print $NF}')
 #            echo -e "\033[32mUp\t$pid\t$i\t\t\t$_profile\t$port\033[0m" 
             printf "\033[32mUp\t%-5s\t%-20s\t\t\t%-5s\t%-5s\n\033[0m" $pid $i $_profile $port
         else
