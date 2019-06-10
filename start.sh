@@ -37,6 +37,8 @@ startone(){
         _profilr=""
         if [ -n "$2" ]; then
             _profile="--spring.profiles.active=$2"
+        else
+            _profile="--spring.profiles.active=dev"
         fi
 #        echo "profile is $_profile"
         
@@ -47,7 +49,7 @@ startone(){
             if [ -n "$pid" ];then
                 echo -e "\033[32m$1 Up $pid\033[0m" 
             else
-                nohup java -Xmx128m -Xss256k -Xms64m -Djava.compiler=NONE -jar $jar $_profile >> nohup-$1.out 2>&1 &
+                nohup java -Xmx128m -Xss256k -Xms64m -jar $jar $_profile >> nohup-$1.out 2>&1 &
                 echo -e "\033[33mstarting $1 $_profile\033[0m"
             fi
         else
@@ -65,7 +67,7 @@ list(){
     for i in ${moduls[*]}; do
         jar=spring-cloud-demo-$i/target/spring-cloud-demo-$i-0.0.1-SNAPSHOT.jar
         pid=$(ps -aux | grep $jar | grep -v grep | awk '{print $2}')
-        _profile=$(ps -aux | grep $jar | grep -v grep | awk '{print $(NF)}' | awk -F'=' '{print $NF}')
+        _profile=$(ps -aux | grep $jar | grep spring.profiles.active | grep -v grep | awk '{print $(NF)}' | awk -F'=' '{print $NF}')
 #        echo $pid $jar
         if [ -n "$pid" ];then
             port=$(lsof -p $pid | grep LISTEN | awk '{print $(NF-1)}' | awk -F':' '{print $NF}')
