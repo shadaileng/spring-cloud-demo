@@ -3,7 +3,7 @@
 res="resources"
 DOCKERIZE_VERSION=v0.6.1
 
-moduls=("config" "eureka" "admin" "service-redis" "ipkin" "zuul" "service-admin" "web-admin-feign" "web-admin-ribbon")
+moduls=("config" "eureka" "admin" "service-redis" "zipkin" "zuul" "service-admin" "web-admin-feign" "web-admin-ribbon")
 start(){
     for i in ${moduls[*]}; do
         startone $i
