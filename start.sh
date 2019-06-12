@@ -50,7 +50,7 @@ startone(){
                 echo -e "\033[32m$1 Up $pid\033[0m" 
             else
                 # nohup java -Xmx256m -Xss256k -Xms128m -jar $jar $_profile >> nohup-$1.out 2>&1 &
-                nohup java -Xms32m -Xmx64m -jar $jar $_profile >> nohup-$1.out 2>&1 &
+                nohup java -Xms64m -Xmx64m -Xmn32m -Xss256k -XX:ParallelGCThreads=2 -Djava.compiler=NONE -jar $jar $_profile >> nohup-$1.out 2>&1 &
                 echo -e "\033[33mstarting $1 $_profile\033[0m"
             fi
         else
