@@ -58,6 +58,6 @@ public class DispatcherController {
         if (StringUtils.isNotBlank(url)) {
             map.put("url", url);
         }
-        return "login";
+        return "redirect:login";
     }
 }
