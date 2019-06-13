@@ -107,6 +107,7 @@
                         // $form.prev('p').html('欢迎用户[' + user.userName + ']登陆').css('background', '#7bed9f')
                     } else {
                         console.log('msg:', result.message)
+                        $form.prev('p').html(result.message).css('background', '#ff6b81')
                     }
                 },
                 error: function () {
