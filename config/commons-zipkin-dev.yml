@@ -6,3 +6,5 @@ management:
     web:
       server:
         auto-time-requests: false
+host:
+  sso: http://localhost/8900
