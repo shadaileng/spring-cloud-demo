@@ -156,7 +156,7 @@ undeploy(){
 }
 
 package(){
-    mvn clean package -Dmaven.test.skip=true
+    mvn clean install -Dmaven.test.skip=true
     [[ ! -d "$res" ]] && mkdir ${res}
 #    cp spring-cloud-demo*/target/*.jar $res
     if [[ ! -f "$res/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz" ]];then
