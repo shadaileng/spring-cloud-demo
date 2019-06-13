@@ -7,3 +7,5 @@ spring:
 feign:
   hystrix:
     enabled: true
+host:
+  sso: http://${ipaddr}:8900

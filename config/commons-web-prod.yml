@@ -8,4 +8,4 @@ feign:
   hystrix:
     enabled: true
 host:
-  sso: http://localhost:8900
+  sso: http://${ipaddr}:8900
