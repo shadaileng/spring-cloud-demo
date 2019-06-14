@@ -1,13 +1,19 @@
 package com.qpf.spring.cloud.commons.filter;
 
+import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class CorsFilter implements Filter {
+@Component
+@ServletComponentScan
+@WebFilter(urlPatterns = "/*",filterName = "corsFilter")
+public class CorsFilter  implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -34,7 +40,7 @@ public class CorsFilter implements Filter {
             return;
         }
 
-        chain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
 
     @Override
