@@ -3,3 +3,8 @@ server:
 spring:
   application:
     name: spring-cloud-demo-sso
+  #不覆盖本地配置文件
+  cloud:
+    config:
+      override-none: true
+      override-system-properties: false
