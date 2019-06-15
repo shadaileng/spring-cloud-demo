@@ -1,0 +1,6 @@
+#不覆盖本地配置文件
+spring:
+  cloud:
+    config:
+      override-none: true
+      override-system-properties: false
