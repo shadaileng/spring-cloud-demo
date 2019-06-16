@@ -16,6 +16,8 @@ spring:
   cloud:
     config:
       uri: http://116.85.54.176:8888
-      name: commons-eureka, commons-admin, commons-zipkin, commons-service, commons-web, sso
+      name: commons-eureka, commons-admin, commons-zipkin, commons-config, commons-service, commons-web, sso
       label: dev
       profile: prod
+#ipreg: localhost
+ipreg: 192.168.0.7

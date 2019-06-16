@@ -25,6 +25,8 @@ public class LoginInterceptor implements HandlerInterceptor {
     private String HOST_SSO;
     @Autowired
     private RedisCacheService redisCacheService;
+
+    private HttpSession session;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String token = CookieUtils.getCookieValue(request, HttpConstant.COOKIE_TOKEN);
@@ -37,6 +39,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             }
             return false;
         }
+        session = request.getSession();
         return true;
     }
 
@@ -44,7 +47,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         String token = CookieUtils.getCookieValue(request, HttpConstant.COOKIE_TOKEN);
         if (StringUtils.isNotBlank(token)) {
-            HttpSession session = request.getSession();
+//            HttpSession session = request.getSession();
             User user = (User) session.getAttribute(HttpConstant.SESSION_USER);
             if (user == null) {
                 String resultJson = redisCacheService.get(token);

@@ -16,8 +16,9 @@ public class BaseResult {
     private String message;
     private List<Error> errors;
     private Cursor cursor;
+    private String token;
 
-    private static BaseResult crateBaseResult(Boolean result, Object data, String message, List<Error> errors, Cursor cursor) {
+    private static BaseResult crateBaseResult(Boolean result, Object data, String message, String token, List<Error> errors, Cursor cursor) {
         BaseResult baseResult = new BaseResult();
         baseResult.setResult(result);
         baseResult.setData(data);
@@ -35,7 +36,7 @@ public class BaseResult {
      * @return
      */
     public static BaseResult OK(Object data, String message, Cursor cursor) {
-        return crateBaseResult(true, data, message, null, cursor);
+        return crateBaseResult(true, data, message, null, null, cursor);
     }
 
     /**
@@ -81,7 +82,7 @@ public class BaseResult {
      * @return
      */
     public static BaseResult ER(String message) {
-        return crateBaseResult(false, null, message, null, null);
+        return crateBaseResult(false, null, message, null, null, null);
     }
 
     /**
@@ -91,7 +92,7 @@ public class BaseResult {
      * @return
      */
     public static BaseResult ER(String message, List<Error> errors) {
-        return crateBaseResult(false, null, message, errors, null);
+        return crateBaseResult(false, null, message, null, errors, null);
     }
 
     /**
@@ -100,7 +101,7 @@ public class BaseResult {
      * @return
      */
     public static BaseResult ER(List<Error> errors) {
-        return crateBaseResult(false, null, FAILED_MESSAGE, errors, null);
+        return crateBaseResult(false, null, FAILED_MESSAGE, null, errors, null);
     }
 
     /**
@@ -110,7 +111,7 @@ public class BaseResult {
      * @return
      */
     public static BaseResult ER(String message, Error... errors) {
-        return crateBaseResult(false, null, message, Arrays.asList(errors), null);
+        return crateBaseResult(false, null, message, null, Arrays.asList(errors), null);
     }
 
     /**
@@ -119,7 +120,7 @@ public class BaseResult {
      * @return
      */
     public static BaseResult ER(Error... errors) {
-        return crateBaseResult(false, null, FAILED_MESSAGE, Arrays.asList(errors), null);
+        return crateBaseResult(false, null, FAILED_MESSAGE, null, Arrays.asList(errors), null);
     }
 
     @Data

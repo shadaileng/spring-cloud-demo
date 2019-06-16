@@ -18,11 +18,11 @@
 
     <dependencies>
         <!-- Project Begin -->
-        <dependency>
-            <groupId>com.qpf</groupId>
-            <artifactId>spring-cloud-demo-commons</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.qpf</groupId>-->
+<!--            <artifactId>spring-cloud-demo-commons</artifactId>-->
+<!--            <version>${project.parent.version}</version>-->
+<!--        </dependency>-->
         <!-- Project End -->
         <!-- Redis Begin -->
 <!--        <dependency>-->
@@ -33,6 +33,10 @@
 <!--            <groupId>org.springframework.boot</groupId>-->
 <!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
 <!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

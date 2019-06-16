@@ -9,7 +9,7 @@ import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboar
 @EnableHystrixDashboard
 @EnableFeignClients
 @EnableDiscoveryClient
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.qpf.spring.cloud"})
 public class WebAdminFeignApplication {
     public static void main(String[] args) {
         SpringApplication.run(WebAdminFeignApplication.class, args);
