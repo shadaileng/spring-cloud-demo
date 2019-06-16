@@ -20,4 +20,4 @@ spring:
       label: dev
       profile: prod
 #ipreg: localhost
-ipreg: 192.168.0.7
+#ipreg: 192.168.0.7
