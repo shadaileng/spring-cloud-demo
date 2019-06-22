@@ -19,5 +19,5 @@ spring:
       name: commons-eureka, commons-admin, commons-zipkin, commons-config, commons-service, commons-web, sso
       label: dev
       profile: prod
-#ipreg: localhost
-ipreg: 192.168.0.7
+ipreg: localhost
+#ipreg: 192.168.0.7

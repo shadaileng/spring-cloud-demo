@@ -1,6 +1,7 @@
 package com.qpf.spring.cloud.service.admin.test.service;
 
 import com.qpf.spring.cloud.commons.domain.User;
+import com.qpf.spring.cloud.commons.utils.JsonUtils;
 import org.junit.Test;
 import org.springframework.util.DigestUtils;
 
@@ -54,5 +55,28 @@ public class UserTest {
         }
 
         return line.toString();
+    }
+
+    @Test
+    public void getJson() throws Exception {
+        User user = new User();
+//        user.setId(1);
+        user.setUserName("0002");
+        user.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+        user.setUserCode("0002");
+        user.setLoginCode("0002");
+        user.setMobile("13800000000");
+        user.setPhone("13800000000");
+        user.setSex("1");
+        user.setUserType("1");
+        user.setMgrType("1");
+        user.setStatus("0");
+        user.setCorpCode("B");
+        user.setCorpName("Bank1");
+        user.setCreateBy("1");
+        user.setUpdateBy("1");
+
+        String json = JsonUtils.obj2json(user);
+        System.out.println(json);
     }
 }

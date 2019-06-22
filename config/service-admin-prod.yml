@@ -1,5 +1,5 @@
 ipaddr: 116.85.54.176
-ipreg: localhost
+ipreg: ${ipaddr}
 server:
   port: 8861
 spring:

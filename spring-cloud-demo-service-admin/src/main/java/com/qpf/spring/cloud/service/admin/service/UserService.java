@@ -1,6 +1,8 @@
 package com.qpf.spring.cloud.service.admin.service;
 
+import com.github.pagehelper.PageInfo;
 import com.qpf.spring.cloud.commons.domain.User;
+import com.qpf.spring.cloud.commons.dto.BaseResult;
 
 import java.util.List;
 
@@ -12,17 +14,14 @@ public interface UserService {
     List<User> selectAll();
 
     /**
-     * 注册
+     * 分页
      * @param user
      * @return
      */
-    User register(User user);
+    PageInfo page(int start, int length, User user);
 
-    /**
-     * 登陆
-     * @param loginCode
-     * @param password
-     * @return
-     */
-    User login(String loginCode, String password);
+    BaseResult save(User user);
+
+    BaseResult delete(User user);
+
 }

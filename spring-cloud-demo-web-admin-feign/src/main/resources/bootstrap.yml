@@ -20,5 +20,5 @@ spring:
       label: dev
       profile: prod
 host:
-#  sso: http://localhost:8900
-  sso: http://116.85.54.176:8900
+  sso: http://localhost:8900
+#  sso: http://116.85.54.176:8900

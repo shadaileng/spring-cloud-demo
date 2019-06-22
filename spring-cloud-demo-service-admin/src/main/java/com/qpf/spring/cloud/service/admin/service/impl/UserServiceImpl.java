@@ -1,25 +1,28 @@
 package com.qpf.spring.cloud.service.admin.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.qpf.spring.cloud.commons.domain.User;
+import com.qpf.spring.cloud.commons.dto.BaseResult;
 import com.qpf.spring.cloud.commons.mapper.UserMapper;
 import com.qpf.spring.cloud.service.admin.service.UserService;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
-import tk.mybatis.mapper.entity.Example;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 @Service
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
-    @Autowired
+
     private UserMapper userMapper;
-//    @Autowired
-//    public UserServiceImpl(UserMapper userMapper) {
-//        this.userMapper = userMapper;
-//    }
+
+    @Autowired
+    public UserServiceImpl(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
 
     @Override
     public List<User> selectAll() {
@@ -27,34 +30,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(User user) {
-        String now = new SimpleDateFormat("YYYYMMddHHmmssSSS").format(new Date());
-        user.setCreateDate(now);
-        user.setUpdateDate(now);
-        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
-        int insert = userMapper.insert(user);
-        if (insert > 0) {
-            Example example = new Example(User.class);
-            example.createCriteria().andEqualTo("id", insert);
-            userMapper.selectOneByExample(example);
-        } else {
-            user = null;
-        }
-        return user;
+    public PageInfo page(int start, int length, User user) {
+        PageHelper pageHelper = new PageHelper();
+        pageHelper.startPage(start, length);
+        PageInfo<User> pageInfo = new PageInfo<>(userMapper.select(user));
+        return pageInfo;
     }
 
     @Override
-    public User login(String loginCode, String password) {
-        Example example = new Example(User.class);
-        example.createCriteria().andEqualTo("loginCode", loginCode);
-        User user = userMapper.selectOneByExample(example);
-
-        if (user != null) {
-            if (StringUtils.equals(user.getPassword(), DigestUtils.md5DigestAsHex(password.getBytes()))) {
-                return user;
-            }
+    @Transactional(readOnly = false)
+    public BaseResult save(User user) {
+        Integer id = user.getId();
+        int save = 0;
+        String now = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+        if (id != null) {
+            user.setUpdateDate(now);
+            save = userMapper.updateByPrimaryKeySelective(user);
+        } else {
+            user.setCreateDate(now);
+            user.setUpdateDate(now);
+            save = userMapper.insert(user);
         }
-
-        return null;
+        return save > 0 ? BaseResult.OK(user, "保存成功") : BaseResult.ER("保存失败");
     }
+
+    @Override
+    @Transactional(readOnly = false)
+    public BaseResult delete(User user) {
+        int delete = userMapper.delete(user);
+        return delete > 0 ? BaseResult.OK(user.getId(), "删除成功") : BaseResult.ER("删除失败");
+    }
+
 }

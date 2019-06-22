@@ -1,5 +1,7 @@
 package com.qpf.spring.cloud.service.admin.test.service;
 
+import com.github.pagehelper.PageInfo;
+import com.qpf.spring.cloud.commons.dto.BaseResult;
 import com.qpf.spring.cloud.service.admin.ServiceAdminApplication;
 import com.qpf.spring.cloud.commons.domain.User;
 import com.qpf.spring.cloud.service.admin.service.UserService;
@@ -12,6 +14,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import java.util.List;
 
@@ -25,12 +28,25 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    public void testRegister() {
+    public void testPage() {
+        PageInfo page = userService.page(1, 10, null);
+        System.out.println(page);
+    }
+
+    @Test
+    public void testSelectAll(){
+        List<User> users = userService.selectAll();
+        Assert.assertEquals(1, users.size());
+    }
+
+    @Test
+    public void testSaveAndDelete() {
         User user = new User();
-        user.setUserName("0001");
-        user.setPassword("123456");
-        user.setUserCode("0001");
-        user.setLoginCode("0001");
+//        user.setId(1);
+        user.setUserName("0002");
+        user.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+        user.setUserCode("0002");
+        user.setLoginCode("0002");
         user.setMobile("13800000000");
         user.setPhone("13800000000");
         user.setSex("1");
@@ -38,23 +54,15 @@ public class UserServiceTest {
         user.setMgrType("1");
         user.setStatus("0");
         user.setCorpCode("B");
-        user.setCorpName("Bank");
+        user.setCorpName("Bank1");
         user.setCreateBy("1");
         user.setUpdateBy("1");
-        User register = userService.register(user);
-        Assert.assertEquals(user.getLoginCode(), register.getLoginCode());
-    }
-    @Test
-    public void testLogin() {
-        User login = userService.login("0001", "123456");
-        Assert.assertNotNull(login);
-        System.out.println(login);
-    }
+        BaseResult save = userService.save(user);
+        System.out.println(save);
 
-    @Test
-    public void testSelectAll(){
-        List<User> users = userService.selectAll();
-        Assert.assertEquals(1, users.size());
+        BaseResult delete = userService.delete(user);
+
+        System.out.println(delete);
     }
 
 }

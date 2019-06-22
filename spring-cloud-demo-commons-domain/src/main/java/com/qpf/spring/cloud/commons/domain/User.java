@@ -1,7 +1,9 @@
 package com.qpf.spring.cloud.commons.domain;
 
-import javax.persistence.*;
+import lombok.ToString;
 
+import javax.persistence.*;
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
