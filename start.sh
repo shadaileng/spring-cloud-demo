@@ -165,6 +165,44 @@ package(){
     ls -F | grep "^spring-cloud-.*/$" | xargs -n 1 cp ${res}/dockerize-linux-amd64-${DOCKERIZE_VERSION}.tar.gz
 }
 
+runone(){
+    delay=30
+    startone ${1} prod
+    echo "run ...."
+    i=0
+    while [[ ${i} -lt 10 ]];do
+        let last=(i+1)*delay
+        sleep ${delay}
+        echo -e "\033[33mwaiting ${1} started... ${last}s \033[0m"
+        pid=$(ps -aux | grep spring-cloud-demo-${1} | grep -v grep | awk '{print $2}')
+        if [[ -n ${pid} ]];then
+            port=$(lsof -i | grep LISTEN | grep ${pid})
+            if [[ -n ${port} ]];then
+                i=10
+            fi
+        fi
+        let i++
+    done
+    pid=$(ps -aux | grep spring-cloud-demo-${1} | grep -v grep | awk '{print $2}')
+    if [[ -n ${pid} ]];then
+        port=$(lsof -i | grep LISTEN | grep ${pid})
+        if [[ -z ${port} ]];then
+            echo -e "\033[33m${1} faile to start... \033[0m"
+            stop
+            exit -1
+        else
+            echo -e "\033[33m${1} success to start... \033[0m"
+        fi
+    fi
+}
+
+run() {
+    runone config
+    runone eureka
+    runone service-redis
+    runone service-admin
+}
+
 case $1 in
     start)
         start
@@ -201,6 +239,9 @@ case $1 in
     ;;
     undeploy)
         undeploy
+    ;;
+    run)
+        run
     ;;
     *)
         echo -e "\033[33mstart.sh start|stop|startone|list|stopone|package|buildone|build|deployone|deploy|undeployone|undeploy\033[0m"
