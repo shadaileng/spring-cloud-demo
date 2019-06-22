@@ -22,6 +22,6 @@ public class AdminController {
             @RequestParam(required = false, defaultValue = "0") Integer start,
             @RequestParam(required = false, defaultValue = "2") Integer length) {
 
-        return adminService.page(start, length);
+        return null;
     }
 }
