@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AdminServiceHystrix implements AdminService {
     @Override
-    public BaseResult page(Integer start, Integer length) {
+    public BaseResult page(Integer start, Integer length, String userJson) {
         return BaseResult.ER("502: Bad gateway");
     }
 }
