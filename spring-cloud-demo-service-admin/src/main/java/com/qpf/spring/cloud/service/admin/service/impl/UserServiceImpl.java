@@ -59,4 +59,10 @@ public class UserServiceImpl implements UserService {
         return delete > 0 ? BaseResult.OK(user.getId(), "删除成功") : BaseResult.ER("删除失败");
     }
 
+    @Override
+    public BaseResult getUserById(User user) {
+        user = userMapper.selectOne(user);
+        return user != null ? BaseResult.OK(user, "查询成功") : BaseResult.ER("查询失败");
+    }
+
 }

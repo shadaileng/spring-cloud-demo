@@ -16,6 +16,7 @@ spring:
   cloud:
     config:
       uri: http://116.85.54.176:8888
-      name: commons-eureka, commons-admin, commons-zuul, commons-service, service-admin
+      name: commons-eureka, commons-admin, commons-config, commons-zuul, commons-service, service-admin
       label: dev
       profile: prod
+# ipreg: localhost

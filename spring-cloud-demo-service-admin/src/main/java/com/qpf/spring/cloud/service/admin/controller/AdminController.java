@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("v1/api")
+@RequestMapping("v1/api/user")
 public class AdminController {
 
     private UserService userService;
@@ -81,6 +81,18 @@ public class AdminController {
             User user = new User();
             user.setId(id);
             result = userService.delete(user);
+        } catch (Exception e) {
+            result = BaseResult.ER(String.format("ERROR: %s", e.getMessage()));
+        }
+        return result;
+    }
+    @GetMapping("{id}")
+    private BaseResult getUserById(Integer id) {
+        BaseResult result = null;
+        try {
+            User user = new User();
+            user.setId(id);
+            result = userService.getUserById(user);
         } catch (Exception e) {
             result = BaseResult.ER(String.format("ERROR: %s", e.getMessage()));
         }

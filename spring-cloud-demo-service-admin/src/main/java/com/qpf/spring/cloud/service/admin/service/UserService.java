@@ -24,4 +24,6 @@ public interface UserService {
 
     BaseResult delete(User user);
 
+    BaseResult getUserById(User user);
+
 }
