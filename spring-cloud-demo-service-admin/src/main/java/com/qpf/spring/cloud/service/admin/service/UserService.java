@@ -22,7 +22,7 @@ public interface UserService {
 
     BaseResult save(User user);
 
-    BaseResult delete(User user);
+    BaseResult delete(Integer[] ids);
 
     BaseResult getUserById(User user);
 

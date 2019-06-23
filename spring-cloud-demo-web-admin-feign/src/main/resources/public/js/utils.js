@@ -58,11 +58,13 @@ const TableUtils = function () {
             data: _data,
             success: function (result) {
                 if (result.result) {
-                    console.log(result)
+                    // console.log(result)
                     handlePage(result)
                     handleData(result)
                 } else {
                     defaultOptions.error(result.message)
+                    layer.open({content: result.message, icon: 5, shift: 6}, function () {
+                    })
                 }
             }
         })
@@ -169,7 +171,7 @@ const TableUtils = function () {
     let handleData = function (result) {
         defaultOptions.data = result.data
         let {target, columns, data} = defaultOptions
-        console.log(data)
+        // console.log(data)
         if (columns.length === 0 && data.length > 0) {
             console.log('[WARN] 列名未定义')
             Object.keys(data[0]).forEach(e=>{

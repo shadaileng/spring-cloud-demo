@@ -94,7 +94,7 @@
                         <input type="hidden" name="id">
                         <div class="form-group">
                             <label class="control-label" for="inputUsername"><i class="fa fa-user"></i>姓名:</label>
-                            <input type="text" class="form-control required" id="inputUsername" placeholder="请输入姓名..." name="username">
+                            <input type="text" class="form-control required" id="inputUsername" placeholder="请输入姓名..." name="userName">
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="inputEmail"><i class="fa fa-envelope-o"></i>邮箱:</label>
@@ -126,9 +126,13 @@
         $(function () {
             Validate.validateForm('inputForm')
             // APP.initModal('#modal-default', '更新用户', '新增用户')
+            APP.setParam({
+                deleteUrl: "delete",
+                getUserUrl: ""
+            })
             ModalUtil.init({
                 data: {
-                    username: '',
+                    userName: '',
                     email: '',
                     phone: '',
                     id: ''
@@ -138,8 +142,7 @@
                     update: '更新用户'
                 },
                 url: {
-                    add: 'add',
-                    update: 'update'
+                    save: 'save',
                 },
                 target: '#modal-default',
                 callback: function () {
@@ -188,7 +191,7 @@
                     data: 'operator',
                     type: 'func',
                     func: (e)=>{
-                        let content = '<button type="button" class="btn btn-success btn-xs" data-id=' + e['id'] + ' data-toggle="modal" data-target="#modal-default"><i class="fa fa-edit"></i>更新</button>\
+                        let content = '<button type="button" class="btn btn-success btn-xs" data-id=' + e['id'] + ' name="upd"><i class="fa fa-edit"></i>更新</button>\
                                        <button type="button" class="btn btn-danger btn-xs" data-id=' + e['id'] + ' name="del"><i class="fa fa-trash"></i>删除</button>'
 
                         return content

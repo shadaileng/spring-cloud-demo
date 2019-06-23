@@ -75,12 +75,10 @@ public class AdminController {
             @ApiImplicitParam(name = "id", value = "用户Id", dataTypeClass = Integer.class)
     })
     @DeleteMapping("delete")
-    private BaseResult delete(Integer id) {
+    private BaseResult delete(Integer[] ids) {
         BaseResult result;
         try {
-            User user = new User();
-            user.setId(id);
-            result = userService.delete(user);
+            result = userService.delete(ids);
         } catch (Exception e) {
             result = BaseResult.ER(String.format("ERROR: %s", e.getMessage()));
         }

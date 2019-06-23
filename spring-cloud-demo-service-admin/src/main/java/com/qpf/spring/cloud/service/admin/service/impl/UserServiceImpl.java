@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 @Service
@@ -54,9 +55,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public BaseResult delete(User user) {
-        int delete = userMapper.delete(user);
-        return delete > 0 ? BaseResult.OK(user.getId(), "删除成功") : BaseResult.ER("删除失败");
+    public BaseResult delete(Integer[] ids) {
+        int delete = userMapper.deleteByIds(ids);
+        return delete > 0 ? BaseResult.OK(Arrays.asList(ids), "删除成功") : BaseResult.ER("删除失败");
     }
 
     @Override

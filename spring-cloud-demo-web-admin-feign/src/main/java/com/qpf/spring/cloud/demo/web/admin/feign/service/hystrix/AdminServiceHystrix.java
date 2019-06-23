@@ -11,4 +11,19 @@ public class AdminServiceHystrix implements AdminService {
     public BaseResult page(Integer start, Integer length, String userJson) {
         return BaseResult.ER("502: Bad gateway");
     }
+
+    @Override
+    public BaseResult getUserById(Integer id) {
+        return BaseResult.ER("502: Bad gateway");
+    }
+
+    @Override
+    public BaseResult save(String userJson) {
+        return BaseResult.ER("502: Bad gateway");
+    }
+
+    @Override
+    public BaseResult delete(Integer id) {
+        return BaseResult.ER("502: Bad gateway");
+    }
 }

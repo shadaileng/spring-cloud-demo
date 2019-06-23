@@ -1,6 +1,11 @@
-var APP = function () {
+const APP = function () {
+    let defaultOptions = {
+        deleteUrl: 'delete',
+        getUserUrl: "user",
+        updateUrl: 'update'
+    }
 
-    let initiCheck = function () {
+    let initCheck = function () {
         // console.log('init iCheck')
 
         $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
@@ -29,6 +34,41 @@ var APP = function () {
         })
         return ids
     }
+    
+    let updateById = function(id) {
+        if (id === null || id === undefined || id === '') return
+        let loadingIndex
+        $.ajax({
+            url: defaultOptions.getUserUrl + id,
+            type: 'GET',
+            beforeSend: function () {
+                loadingIndex = layer.msg('处理中', {icon: 16})
+            },
+            success: function (result) {
+                layer.close(loadingIndex)
+                if (result.result) {
+                    console.log('查询成功: ')
+                    let _data = result.data
+                    ModalUtil.init({
+                        data: _data
+                    })
+                    ModalUtil.switch("show")
+                } else {
+                    layer.open({content: result.message, icon: 5, shift: 6}, function () {
+
+                    })
+                }
+            },
+            error: function () {
+                layer.close(loadingIndex)
+                console.log('查询失败')
+                layer.open({content: '处理异常', icon: 5, shift: 6}, function () {
+
+                })
+            }
+        })
+        
+    }
 
     let deleteByIds = function (ids) {
         if (ids.length <= 0) {
@@ -40,22 +80,22 @@ var APP = function () {
         layer.confirm('是否删除[' + ids + ']?', {icon: 3, title: '删除'}, function(index) {
             let loadingIndex;
             $.ajax({
-                url: 'delete',
+                url: defaultOptions.deleteUrl,
                 type: 'POST',
                 data: {ids: ids.toString()},
                 beforeSend: function () {
                     loadingIndex = layer.msg('处理中', {icon: 16})
                 },
-                success: function (data) {
+                success: function (result) {
                     layer.close(loadingIndex);
-                    if(data.code == 200) {
+                    if(result.result) {
                         $('#modal-default').modal('hide')
-                        layer.msg(data.msg, {time:2000, icon: 6, shift: 6}, function () {
+                        layer.msg(result.message, {time:2000, icon: 6, shift: 6}, function () {
                             TableUtils.firstPage() && window.location.reload()
                             // window.location.reload()
                         })
-                    } else if (data.code == 500) {
-                        layer.open({content: data.msg, icon: 5, shift: 6}, function () {
+                    } else {
+                        layer.open({content: result.message, icon: 5, shift: 6}, function () {
 
                         })
                     }
@@ -69,21 +109,38 @@ var APP = function () {
             })
         })
     }
+    let _extends = function (src, target) {
+        for (let i in src) {
+            let val = src[i]
+            target[i] = val
+        }
+        return target
+    }
 
     return {
-        initiCheck: function () {
-            initiCheck()
+        initCheck: function () {
+            initCheck()
+        },
+        setParam: function(opts) {
+            _extends(opts, defaultOptions)
         },
         initComponents: function () {
-            initiCheck()
-
-            $('button[name=del]').off('click')
-            $('button[name=del]').on('click', function (e) {
+            initCheck()
+            let $upd = $('button[name=upd]')
+            $upd.off('click')
+            $upd.on('click', function (e) {
+                let id = e.target.dataset.id
+                updateById(id)
+            })
+            let $del = $('button[name=del]')
+            $del.off('click')
+            $del.on('click', function (e) {
                 let ids = e.target.dataset.id
                 deleteByIds([ids]);
             })
-            $('#batchDel').off('click')
-            $('#batchDel').on('click', function (e) {
+            let $delBatch = $('#batchDel')
+            $delBatch.off('click')
+            $delBatch.on('click', function (e) {
                 let ids = getCheckedId()
                 deleteByIds(ids);
             })
@@ -92,7 +149,7 @@ var APP = function () {
     }
 }();
 
-var ModalUtil = function() {
+const ModalUtil = function() {
     let defaultOptions = {
         data: {},
         target: '#modalId',
@@ -101,8 +158,7 @@ var ModalUtil = function() {
             insert: '新增'
         },
         url: {
-            update: 'update',
-            add: 'add'
+            save: 'save'
         },
         callback: function () {
             console.log("callback...")
@@ -171,43 +227,10 @@ var ModalUtil = function() {
          * modal显示时回调处理
          */
         $(target).on('show.bs.modal', (e)=>{
-            let id = e.relatedTarget.getAttribute('data-id')
-            let loadingIndex;
+            // let id = e.relatedTarget.getAttribute('data-id')
+            // let loadingIndex;
             let _title = ''
-            // 更新
-            if (id) {
-                _title = title.update
-                $.ajax({
-                    url: id,
-                    type: 'GET',
-                    beforeSend: function () {
-                        loadingIndex = layer.msg('处理中', {icon: 16})
-                    },
-                    success: function (result) {
-                        layer.close(loadingIndex)
-                        let _data = data
-                        if (result.code === 200) {
-                            console.log('查询成功: ')
-                            _data = result.data
-                        }
-                        setFormData(_data, target + " form")
-                    },
-                    error: function () {
-                        layer.close(loadingIndex)
-                        console.log('查询失败')
-                        setFormData(data, target + " form")
-                        layer.open({content: '处理异常', icon: 5, shift: 6}, function () {
-
-                        })
-                    }
-                })
-            }
-            // 新增
-            else {
-                _title = title.insert
-                // setFormData(data, target + " form")
-                setFormData(data, target + " form")
-            }
+            setFormData(defaultOptions.data, target + " form")
             document.querySelector(target + ' .modal-title').innerHTML = _title
         })
 
@@ -223,11 +246,12 @@ var ModalUtil = function() {
         /**
          * 确定按钮事件
          */
+        $(target + ' .modal-footer .btn-primary').off('click')
         $(target + ' .modal-footer .btn-primary').on('click', e => {
             console.log("save...")
             let loadingIndex;
             let id = document.querySelector(target + ' form [name="id"]').value
-            let uri = id === '' || id === 'undefined' ? url.add : url.update
+            let uri = url.save
             if (!layer) {
                 console.log("layer 未加载")
                 return
@@ -239,18 +263,18 @@ var ModalUtil = function() {
                 beforeSend: function () {
                     loadingIndex = layer.msg('处理中', {icon: 16})
                 },
-                success: function (data) {
+                success: function (result) {
                     layer.close(loadingIndex);
-                    if(data.code == 200) {
+                    if(result.result) {
                         $('#modal-default').modal('hide')
-                        layer.msg(data.msg, {time:2000, icon: 6, shift: 6}, function () {
+                        layer.msg(result.message, {time:2000, icon: 6, shift: 6}, function () {
                             defaultOptions.callback && defaultOptions.callback()
                             // TableUtils.firstPage()
                             // console.log("reflash")
                             // window.location.reload()
                         })
-                    } else if (data.code == 500) {
-                        layer.open({content: '_' + data.msg, icon: 5, shift: 6}, function () {
+                    } else {
+                        layer.open({content: '_' + result.message, icon: 5, shift: 6}, function () {
 
                         })
                     }
@@ -268,6 +292,16 @@ var ModalUtil = function() {
     return {
         init: function (opts) {
             initModal(opts)
+        },
+        switch: function (opt) {
+            if(opt.length <= 0) {
+                (opt = 'toggle')
+            }
+            ['hide', 'show', 'toggle'].forEach(e => {
+                if (e === opt) {
+                    $(defaultOptions.target).modal(opt)
+                }
+            })
         }
     }
 }()
@@ -403,6 +437,6 @@ $(function () {
         return
     }
     console.log("加载 app")
-    APP.initiCheck()
+    APP.initCheck()
     APP.initComponents()
 })

@@ -60,7 +60,7 @@ public class UserServiceTest {
         BaseResult save = userService.save(user);
         System.out.println(save);
 
-        BaseResult delete = userService.delete(user);
+        BaseResult delete = userService.delete(new Integer[]{2});
 
         System.out.println(delete);
     }
