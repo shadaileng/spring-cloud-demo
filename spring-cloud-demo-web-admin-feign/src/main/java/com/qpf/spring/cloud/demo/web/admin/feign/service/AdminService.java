@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 @FeignClient(value = "SPRING-CLOUD-DEMO-SERVICE-ADMIN", fallback = AdminServiceHystrix.class)
 public interface AdminService {
 
-    @GetMapping("page")
+    @GetMapping("/v1/api/page")
     public BaseResult page(
             @RequestParam(required = false, defaultValue = "0") Integer start,
             @RequestParam(required = false, defaultValue = "2") Integer length,

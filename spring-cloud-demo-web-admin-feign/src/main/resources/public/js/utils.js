@@ -1,4 +1,4 @@
-var TableUtils = function () {
+const TableUtils = function () {
     let defaultOptions = {
         mode: 'local',          // local | server
         url: '',                // server mode
@@ -17,7 +17,8 @@ var TableUtils = function () {
         target: '#tableEL',     // 初始化检查target
         status: false,          // 插件状态
         isBoot: false,           // 是否引入Bootstrap
-        callback: console.log
+        callback: console.log,
+        error: console.log
     }
     let _extends = function (src, target) {
         for (let i in src) {
@@ -56,20 +57,23 @@ var TableUtils = function () {
             url: url,
             data: _data,
             success: function (result) {
-                defaultOptions.data = result
-                // console.log(result)
-                handlePage(result)
-                handleData()
+                if (result.result) {
+                    console.log(result)
+                    handlePage(result)
+                    handleData(result)
+                } else {
+                    defaultOptions.error(result.message)
+                }
             }
         })
     }
     let handlePage = function (data) {
-        defaultOptions.page.total = data.total
-        let total = data.total
+        defaultOptions.page.total = data.cursor.total
+        let total = defaultOptions.page.total
         let pageSize = defaultOptions.page.pageSize
         defaultOptions.page.pageCount = Math.floor((total - 1) / pageSize) + 1
-        defaultOptions.page.hasPre = defaultOptions.page.index != 1
-        defaultOptions.page.hasNext = defaultOptions.page.index != defaultOptions.page.pageCount
+        defaultOptions.page.hasPre = defaultOptions.page.index !== 1
+        defaultOptions.page.hasNext = defaultOptions.page.index !== defaultOptions.page.pageCount
         // defaultOptions.page.index = index
         // let start = (index - 1) * pageSize
         // console.log(defaultOptions)
@@ -162,12 +166,13 @@ var TableUtils = function () {
         })
 
     }
-    let handleData = function () {
+    let handleData = function (result) {
+        defaultOptions.data = result.data
         let {target, columns, data} = defaultOptions
-        // console.log(data)
-        if (columns.length === 0 && data.data.length > 0) {
+        console.log(data)
+        if (columns.length === 0 && data.length > 0) {
             console.log('[WARN] 列名未定义')
-            Object.keys(data.data[0]).forEach(e=>{
+            Object.keys(data[0]).forEach(e=>{
                 let el = {
                     data: e,
                     type: 'string',
@@ -203,7 +208,7 @@ var TableUtils = function () {
     }
     let setTableData = function () {
         let {target, columns, data} = defaultOptions
-        let _data = data.data
+        let _data = data
         // console.log(data)
         if (_data === undefined || _data.length <= 0) {
             console.log('data为空')
@@ -231,7 +236,7 @@ var TableUtils = function () {
                         }
                         _innerEl = el
                     }
-                    _content = _innerEl === undefined ? '' :  _innerEl.toString()
+                    _content = _innerEl === null || _innerEl === undefined ? '' :  _innerEl.toString()
                 }
                 // let _innerEl = e[el]
                 // let _content = typeof _innerEl == 'function' ? _innerEl() :( _innerEl == undefined ? '' :  _innerEl.toString())

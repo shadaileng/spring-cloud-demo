@@ -159,7 +159,7 @@
                     type: 'string'
                 },
                 {
-                    data: 'username',
+                    data: 'userName',
                     type: 'string'
                 },
                 {
@@ -171,17 +171,17 @@
                     type: 'string'
                 },
                 {
-                    data: 'updated',
+                    data: 'updateDate',
                     type: 'func',
                     func: (e)=>{
-                        return new Date(parseInt(e['updated'])).toLocaleString()
+                        return new Date(parseInt(e['updateDate'])).toLocaleString()
                     }
                 },
                 {
-                    data: 'created',
+                    data: 'createDate',
                     type: 'func',
                     func: (e)=>{
-                        return new Date(parseInt(e['created'])).toLocaleString()
+                        return new Date(parseInt(e['createDate'])).toLocaleString()
                     }
                 },
                 {
