@@ -86,8 +86,13 @@ public class AdminController {
         }
         return result;
     }
+
+    @ApiOperation("根据Id查询用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户Id", dataTypeClass = Integer.class)
+    })
     @GetMapping("{id}")
-    private BaseResult getUserById(Integer id) {
+    private BaseResult getUserById(@PathVariable(value = "id") Integer id) {
         BaseResult result;
         try {
             User user = new User();
