@@ -23,7 +23,8 @@ public class AdminServiceHystrix implements AdminService {
     }
 
     @Override
-    public BaseResult delete(Integer id) {
+    public BaseResult delete(Integer[] ids) {
         return BaseResult.ER("502: Bad gateway");
     }
+
 }
