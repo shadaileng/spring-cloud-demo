@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 @Service
@@ -31,18 +30,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageInfo page(int start, int length, User user) {
-        PageHelper pageHelper = new PageHelper();
-        pageHelper.startPage(start, length);
-        PageInfo<User> pageInfo = new PageInfo<>(userMapper.select(user));
-        return pageInfo;
+//        PageHelper pageHelper = new PageHelper();
+        PageHelper.startPage(start, length);
+        return new PageInfo<>(userMapper.select(user));
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public BaseResult save(User user) {
         Integer id = user.getId();
-        int save = 0;
-        String now = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+        int save;
+        String now = String.valueOf(new Date().getTime());
         if (id != null) {
             user.setUpdateDate(now);
             save = userMapper.updateByPrimaryKeySelective(user);
@@ -55,7 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public BaseResult delete(User user) {
         int delete = userMapper.delete(user);
         return delete > 0 ? BaseResult.OK(user.getId(), "删除成功") : BaseResult.ER("删除失败");
