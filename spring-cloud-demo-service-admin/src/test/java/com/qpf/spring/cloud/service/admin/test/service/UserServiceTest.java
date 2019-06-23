@@ -65,4 +65,12 @@ public class UserServiceTest {
         System.out.println(delete);
     }
 
+    @Test
+    public void testGetById() {
+        User user = new User();
+        user.setId(1);
+        BaseResult userById = userService.getUserById(user);
+        System.out.println(userById);
+    }
+
 }

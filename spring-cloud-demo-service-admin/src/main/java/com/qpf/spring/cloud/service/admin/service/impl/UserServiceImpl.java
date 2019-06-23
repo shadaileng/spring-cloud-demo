@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public BaseResult getUserById(User user) {
-        user = userMapper.selectOne(user);
+        user = userMapper.selectByPrimaryKey(user);
         return user != null ? BaseResult.OK(user, "查询成功") : BaseResult.ER("查询失败");
     }
 

@@ -25,16 +25,16 @@ public class AdminController {
 
     @ApiOperation("分页查询")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "start", value = "开始下标", required = false),
-            @ApiImplicitParam(name = "length", value = "每页元素数量", required = false),
-            @ApiImplicitParam(name = "userJson", value = "条件", required = false)
+            @ApiImplicitParam(name = "start", value = "开始下标"),
+            @ApiImplicitParam(name = "length", value = "每页元素数量"),
+            @ApiImplicitParam(name = "userJson", value = "条件")
     })
     @GetMapping("page")
     public BaseResult page(
             @RequestParam(required = false, defaultValue = "0") Integer start,
             @RequestParam(required = false, defaultValue = "2") Integer length,
             @RequestParam(required = false) String userJson) {
-        BaseResult result = null;
+        BaseResult result;
         User user = null;
         try {
             if (StringUtils.isNotBlank(userJson)) {
@@ -59,8 +59,8 @@ public class AdminController {
             @ApiImplicitParam(name = "userJson", value = "用户Json字符串", dataTypeClass = String.class)
     })
     @PostMapping("save")
-    private BaseResult save(@RequestParam(required = true) String userJson) {
-        BaseResult result = null;
+    private BaseResult save(@RequestParam String userJson) {
+        BaseResult result;
         try {
             User user = JsonUtils.json2pojo(userJson, User.class);
             result = userService.save(user);
@@ -76,7 +76,7 @@ public class AdminController {
     })
     @DeleteMapping("delete")
     private BaseResult delete(Integer id) {
-        BaseResult result = null;
+        BaseResult result;
         try {
             User user = new User();
             user.setId(id);
@@ -88,7 +88,7 @@ public class AdminController {
     }
     @GetMapping("{id}")
     private BaseResult getUserById(Integer id) {
-        BaseResult result = null;
+        BaseResult result;
         try {
             User user = new User();
             user.setId(id);
