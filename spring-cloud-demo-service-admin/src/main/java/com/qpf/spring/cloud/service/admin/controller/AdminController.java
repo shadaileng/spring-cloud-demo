@@ -72,10 +72,10 @@ public class AdminController {
 
     @ApiOperation("删除用户")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户Id", dataTypeClass = Integer.class)
+            @ApiImplicitParam(name = "ids", value = "用户Id数组")
     })
     @DeleteMapping("delete")
-    private BaseResult delete(Integer[] ids) {
+    private BaseResult delete(@RequestParam("ids") Integer[] ids) {
         BaseResult result;
         try {
             result = userService.delete(ids);
