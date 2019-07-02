@@ -30,7 +30,7 @@ const APP = function () {
     let getCheckedId = function() {
         let ids = []
         $('input[type="checkbox"].minimal:checked').each((i, e) => {
-            ids.push(e.dataset.id)
+            e.dataset.id && ids.push(e.dataset.id)
         })
         return ids
     }
@@ -89,11 +89,11 @@ const APP = function () {
                 success: function (result) {
                     layer.close(loadingIndex);
                     if(result.result) {
-                        $('#modal-default').modal('hide')
-                        layer.msg(result.message, {time:2000, icon: 6, shift: 6}, function () {
-                            TableUtils.firstPage() && window.location.reload()
-                            // window.location.reload()
-                        })
+                        TableUtils.firstPage() // && window.location.reload()
+                        // layer.msg(result.message, {time:2000, icon: 6, shift: 6}, function () {
+                        //
+                        //     // window.location.reload()
+                        // })
                     } else {
                         layer.open({content: result.message, icon: 5, shift: 6}, function () {
 

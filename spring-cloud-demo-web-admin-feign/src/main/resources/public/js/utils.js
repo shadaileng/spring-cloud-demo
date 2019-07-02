@@ -214,7 +214,7 @@ const TableUtils = function () {
         // console.log(data)
         if (_data === undefined || _data.length <= 0) {
             console.log('data为空')
-            return
+            // return
         }
         let selector = target + ' tbody'
         let _body = document.querySelector(selector)
