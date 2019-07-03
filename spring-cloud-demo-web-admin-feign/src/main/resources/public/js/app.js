@@ -1,7 +1,7 @@
 const APP = function () {
     let defaultOptions = {
         deleteUrl: 'delete',
-        getUserUrl: "user",
+        getUrl: "",
         updateUrl: 'update'
     }
 
@@ -39,7 +39,7 @@ const APP = function () {
         if (id === null || id === undefined || id === '') return
         let loadingIndex
         $.ajax({
-            url: defaultOptions.getUserUrl + id,
+            url: defaultOptions.getUrl + id,
             type: 'GET',
             beforeSend: function () {
                 loadingIndex = layer.msg('处理中', {icon: 16})

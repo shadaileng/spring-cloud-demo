@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageInfo page(int start, int length, User user) {
-//        PageHelper pageHelper = new PageHelper();
         PageHelper.startPage(start, length);
         return new PageInfo<>(userMapper.select(user));
     }

@@ -1,9 +1,13 @@
 package com.qpf.spring.cloud.commons.mapper;
 
 import com.qpf.spring.cloud.commons.domain.User;
+import com.qpf.spring.cloud.commons.provider.UserProvider;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.BaseMapper;
+
+import java.util.List;
+
 @Component
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
@@ -18,5 +22,7 @@ public interface UserMapper extends BaseMapper<User> {
             "#{id}" +
             "</foreach>" +
             "</script>")
-    int deleteByIds(@Param("ids") Integer[] ids);
+    int deleteByIds(@Param("ids") Integer... ids);
+    @SelectProvider(type = UserProvider.class, method = "selectByIds")
+    List<User> selectByIds(@Param("ids") Integer... ids);
 }

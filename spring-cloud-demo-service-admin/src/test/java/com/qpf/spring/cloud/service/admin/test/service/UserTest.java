@@ -1,15 +1,24 @@
 package com.qpf.spring.cloud.service.admin.test.service;
 
 import com.qpf.spring.cloud.commons.domain.User;
+import com.qpf.spring.cloud.commons.provider.UserProvider;
 import com.qpf.spring.cloud.commons.utils.JsonUtils;
 import org.junit.Test;
 import org.springframework.util.DigestUtils;
+import tk.mybatis.mapper.BaseProvider;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class UserTest {
+    @Test
+    public void testProvider() {
+        BaseProvider<User> userBaseProvider = new UserProvider();
+        System.out.println(userBaseProvider);
+        System.out.println(userBaseProvider.selectByIds(1, 2, 3));
+    }
+
     @Test
     public void property() {
         StringBuffer a = new StringBuffer();

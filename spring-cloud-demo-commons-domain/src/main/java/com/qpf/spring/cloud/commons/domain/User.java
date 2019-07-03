@@ -4,7 +4,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 @ToString
-public class User {
+public class User extends BaseDomain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
