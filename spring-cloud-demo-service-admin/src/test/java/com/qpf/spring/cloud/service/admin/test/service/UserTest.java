@@ -1,8 +1,8 @@
 package com.qpf.spring.cloud.service.admin.test.service;
 
 import com.qpf.spring.cloud.commons.domain.User;
-import com.qpf.spring.cloud.commons.provider.UserProvider;
 import com.qpf.spring.cloud.commons.utils.JsonUtils;
+import com.qpf.spring.cloud.service.admin.mapper.UserProvider;
 import org.junit.Test;
 import org.springframework.util.DigestUtils;
 import tk.mybatis.mapper.BaseProvider;

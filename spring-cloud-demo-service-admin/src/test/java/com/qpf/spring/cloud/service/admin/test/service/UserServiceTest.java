@@ -28,6 +28,12 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
+    public void testGetByIds() {
+        BaseResult byIds = userService.getByIds(1, 2, 3);
+        System.out.println(byIds);
+    }
+
+    @Test
     public void testPage() {
         PageInfo page = userService.page(1, 10, null);
         System.out.println(page);
@@ -60,7 +66,7 @@ public class UserServiceTest {
         BaseResult save = userService.save(user);
         System.out.println(save);
 
-        BaseResult delete = userService.delete(new Integer[]{2});
+        BaseResult delete = userService.delete(2);
 
         System.out.println(delete);
     }
@@ -69,7 +75,7 @@ public class UserServiceTest {
     public void testGetById() {
         User user = new User();
         user.setId(1);
-        BaseResult userById = userService.getUserById(user);
+        BaseResult userById = userService.getById(user);
         System.out.println(userById);
     }
 

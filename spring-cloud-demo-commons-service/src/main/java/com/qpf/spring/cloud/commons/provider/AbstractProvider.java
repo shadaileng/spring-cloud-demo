@@ -34,7 +34,7 @@ public abstract class AbstractProvider<T extends BaseDomain> implements BaseProv
     }
 
     @Override
-    public String deleteByIds(Integer[] ids) {
+    public String deleteByIds(@Param("ids")Integer... ids) {
         return new SQL(){
             {
                 DELETE_FROM(tableName);

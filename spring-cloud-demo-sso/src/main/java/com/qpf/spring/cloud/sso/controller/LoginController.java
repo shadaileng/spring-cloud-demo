@@ -1,11 +1,9 @@
 package com.qpf.spring.cloud.sso.controller;
 
 import com.qpf.spring.cloud.commons.constant.HttpConstant;
-import com.qpf.spring.cloud.commons.domain.User;
 import com.qpf.spring.cloud.commons.dto.BaseResult;
 import com.qpf.spring.cloud.commons.utils.CookieUtils;
 import com.qpf.spring.cloud.commons.utils.JsonUtils;
-import com.qpf.spring.cloud.sso.service.DemoService;
 import com.qpf.spring.cloud.sso.service.LoginService;
 import com.qpf.spring.cloud.sso.service.RedisCacheService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -45,7 +43,7 @@ public class LoginController {
         if (result != null) {
             return result;
         }
-        User login = loginService.login(loginCode, password);
+        String login = loginService.login(loginCode, password);
         if (login != null) {
             String token = UUID.randomUUID().toString();
             String redisResult = redisCacheService.set(token, JsonUtils.obj2json(login), 60 * 60 * 24 * 7);
@@ -67,7 +65,7 @@ public class LoginController {
 
     /**
      * 检查登陆参数
-     * @return
+     * @return 返回结果
      */
     private BaseResult checkLogin(String loginCode, String password) {
         BaseResult result = null;
@@ -94,7 +92,7 @@ public class LoginController {
 
     @GetMapping("logout")
     public BaseResult logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        BaseResult result = null;
+        BaseResult result;
 
         String token = CookieUtils.getCookieValue(request, HttpConstant.COOKIE_TOKEN);
 

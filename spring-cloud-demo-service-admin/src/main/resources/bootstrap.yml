@@ -19,4 +19,7 @@ spring:
       name: commons-eureka, commons-admin, commons-config, commons-zuul, commons-service, service-admin
       label: dev
       profile: prod
-# ipreg: localhost
+ipreg: localhost
+logging:
+  level:
+     com.qpf.spring.cloud : debug

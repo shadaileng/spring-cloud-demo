@@ -1,22 +1,31 @@
 package com.qpf.spring.cloud.sso.service;
 
-import com.qpf.spring.cloud.commons.domain.User;
-import com.qpf.spring.cloud.commons.dto.BaseResult;
+import com.qpf.spring.cloud.sso.service.hystrix.LoginServiceHystrix;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
+@Service
+@FeignClient(value = "SPRING-CLOUD-DEMO-SERVICE-ADMIN", fallback = LoginServiceHystrix.class)
 public interface LoginService {
 
     /**
      * 注册
-     * @param user
-     * @return
+     * @param userJson      注册对象
+     * @return              返回结果
+     * @throws Exception    抛出异常
      */
-    BaseResult register(User user);
+    @PostMapping("v1/api/user/register")
+    String register(String userJson) throws Exception;
 
     /**
      * 登陆
-     * @param loginCode
-     * @param password
-     * @return
+     * @param loginCode     登陆账号
+     * @param password      登陆密码
+     * @return              返回结果
+     * @throws Exception    抛出异常
      */
-    User login(String loginCode, String password);
+    @GetMapping("v1/api/user/login")
+    String login(String loginCode, String password) throws Exception;
 }

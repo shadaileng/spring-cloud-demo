@@ -1,7 +1,6 @@
-package com.qpf.spring.cloud.commons.mapper;
+package com.qpf.spring.cloud.service.admin.mapper;
 
 import com.qpf.spring.cloud.commons.domain.User;
-import com.qpf.spring.cloud.commons.provider.UserProvider;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.BaseMapper;
@@ -15,13 +14,7 @@ public interface UserMapper extends BaseMapper<User> {
     @Options(keyColumn = "id", useGeneratedKeys = true)
     int insert(User user);
 
-    @Delete("<script>" +
-            "DELETE FROM USER " +
-            "WHERE id in" +
-            "<foreach item='id' index='index' collection='ids' open='(' separator=',' close=')'>" +
-            "#{id}" +
-            "</foreach>" +
-            "</script>")
+    @DeleteProvider(type = UserProvider.class, method = "deleteByIds")
     int deleteByIds(@Param("ids") Integer... ids);
     @SelectProvider(type = UserProvider.class, method = "selectByIds")
     List<User> selectByIds(@Param("ids") Integer... ids);

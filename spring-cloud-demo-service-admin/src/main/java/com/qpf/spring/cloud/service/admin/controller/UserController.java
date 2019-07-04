@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("v1/api/user")
-public class AdminController {
+public class UserController {
 
     private UserService userService;
 
     @Autowired
-    public AdminController(UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -95,7 +95,38 @@ public class AdminController {
         try {
             User user = new User();
             user.setId(id);
-            result = userService.getUserById(user);
+            result = userService.getById(user);
+        } catch (Exception e) {
+            result = BaseResult.ER(String.format("ERROR: %s", e.getMessage()));
+        }
+        return result;
+    }
+    @ApiOperation("用户登陆")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "loginCode", value = "用户账号", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "password", value = "登陆密码", dataTypeClass = String.class)
+    })
+    @GetMapping("login")
+    public BaseResult login(String loginCode, String password) {
+        BaseResult result;
+        try {
+            result = userService.login(loginCode, password);
+        } catch (Exception e) {
+            result = BaseResult.ER(String.format("ERROR: %s", e.getMessage()));
+        }
+        return result;
+    }
+
+    @ApiOperation("用户注册")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userJson", value = "用户Json字符串", dataTypeClass = String.class)
+    })
+    @PostMapping("register")
+    public BaseResult register(@RequestParam String userJson) {
+        BaseResult result;
+        try {
+            User user = JsonUtils.json2pojo(userJson, User.class);
+            result = userService.register(user);
         } catch (Exception e) {
             result = BaseResult.ER(String.format("ERROR: %s", e.getMessage()));
         }
