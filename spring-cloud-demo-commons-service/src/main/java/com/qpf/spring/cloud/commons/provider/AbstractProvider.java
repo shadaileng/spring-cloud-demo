@@ -1,7 +1,6 @@
 package com.qpf.spring.cloud.commons.provider;
 
 import com.qpf.spring.cloud.commons.domain.BaseDomain;
-import com.qpf.spring.cloud.commons.domain.User;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.jdbc.SQL;
 import tk.mybatis.mapper.BaseProvider;
@@ -16,7 +15,6 @@ public abstract class AbstractProvider<T extends BaseDomain> implements BaseProv
 
     public AbstractProvider() {
         Type type = getClass().getGenericSuperclass();
-        System.out.println(type);
         Type[] arguments = ((ParameterizedType) type).getActualTypeArguments();
         Class clazz = (Class)arguments[0];
         tableName = clazz != null ? clazz.getSimpleName().toLowerCase() : "";

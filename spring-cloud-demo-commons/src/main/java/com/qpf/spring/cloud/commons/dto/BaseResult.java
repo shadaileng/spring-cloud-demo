@@ -1,8 +1,7 @@
 package com.qpf.spring.cloud.commons.dto;
 
 import lombok.Data;
-import lombok.Setter;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 @Data
@@ -23,6 +22,7 @@ public class BaseResult {
         baseResult.setResult(result);
         baseResult.setData(data);
         baseResult.setMessage(message);
+        baseResult.setToken(token);
         baseResult.setErrors(errors);
         baseResult.setCursor(cursor);
         return baseResult;
@@ -30,10 +30,10 @@ public class BaseResult {
 
     /**
      * 操作成功
-     * @param data
-     * @param message
-     * @param cursor
-     * @return
+     * @param data      数据
+     * @param message   信息
+     * @param cursor    游标
+     * @return          返回结果
      */
     public static BaseResult OK(Object data, String message, Cursor cursor) {
         return crateBaseResult(true, data, message, null, null, cursor);
@@ -41,9 +41,9 @@ public class BaseResult {
 
     /**
      * 操作成功
-     * @param data
-     * @param message
-     * @return
+     * @param data      数据
+     * @param message   信息
+     * @return          返回结果
      */
     public static BaseResult OK(Object data, String message) {
         return OK(data, message, null);
@@ -51,9 +51,9 @@ public class BaseResult {
 
     /**
      * 操作成功
-     * @param data
-     * @param cursor
-     * @return
+     * @param data      数据
+     * @param cursor    游标
+     * @return          返回结果
      */
     public static BaseResult OK(Object data, Cursor cursor) {
         return OK(data, SUCCESS_MESSAGE, cursor);
@@ -61,8 +61,8 @@ public class BaseResult {
 
     /**
      * 操作成功
-     * @param data
-     * @return
+     * @param data      数据
+     * @return          返回结果
      */
     public static BaseResult OK(Object data) {
         return OK(data, SUCCESS_MESSAGE);
@@ -70,7 +70,7 @@ public class BaseResult {
 
     /**
      * 操作成功
-     * @return
+     * @return          返回结果
      */
     public static BaseResult OK() {
         return OK(null);
@@ -78,8 +78,8 @@ public class BaseResult {
 
     /**
      * 操作失败
-     * @param message
-     * @return
+     * @param message   信息
+     * @return          返回结果
      */
     public static BaseResult ER(String message) {
         return crateBaseResult(false, null, message, null, null, null);
@@ -87,9 +87,9 @@ public class BaseResult {
 
     /**
      * 操作失败
-     * @param message
-     * @param errors
-     * @return
+     * @param message   信息
+     * @param errors    错误信息
+     * @return          返回结果
      */
     public static BaseResult ER(String message, List<Error> errors) {
         return crateBaseResult(false, null, message, null, errors, null);
@@ -97,8 +97,8 @@ public class BaseResult {
 
     /**
      * 操作失败
-     * @param errors
-     * @return
+     * @param errors    错误信息
+     * @return          返回结果
      */
     public static BaseResult ER(List<Error> errors) {
         return crateBaseResult(false, null, FAILED_MESSAGE, null, errors, null);
@@ -106,9 +106,9 @@ public class BaseResult {
 
     /**
      * 操作失败
-     * @param message
-     * @param errors
-     * @return
+     * @param message   信息
+     * @param errors    错误信息
+     * @return          返回结果
      */
     public static BaseResult ER(String message, Error... errors) {
         return crateBaseResult(false, null, message, null, Arrays.asList(errors), null);
@@ -116,11 +116,26 @@ public class BaseResult {
 
     /**
      * 操作失败
-     * @param errors
-     * @return
+     * @param errors    错误信息
+     * @return          返回结果
      */
     public static BaseResult ER(Error... errors) {
         return crateBaseResult(false, null, FAILED_MESSAGE, null, Arrays.asList(errors), null);
+    }
+
+    /**
+     * 插入错误信息
+     * @param error     错误信息
+     * @return          返回结果
+     */
+    public BaseResult errors(Error error) {
+        if (!getResult()) {
+            if (getErrors() == null) {
+                this.errors = new ArrayList<>();
+            }
+            this.errors.add(error);
+        }
+        return this;
     }
 
     @Data

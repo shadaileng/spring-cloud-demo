@@ -9,8 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DemoController {
 
-    @Autowired
     private DemoService demoService;
+
+    @Autowired
+    public DemoController(DemoService demoService) {
+        this.demoService = demoService;
+    }
 
     @GetMapping("demo")
     public String demo(@RequestParam(value = "msg", required = false) String msg) {

@@ -18,11 +18,11 @@
 
     <dependencies>
         <!-- Project Begin -->
-        <dependency>
-            <groupId>com.qpf</groupId>
-            <artifactId>spring-cloud-demo-commons-service</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.qpf</groupId>-->
+            <!--<artifactId>spring-cloud-demo-commons-service</artifactId>-->
+            <!--<version>${project.parent.version}</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.qpf</groupId>
             <artifactId>spring-cloud-demo-commons-web</artifactId>

@@ -43,23 +43,30 @@ public class LoginController {
         if (result != null) {
             return result;
         }
-        String login = loginService.login(loginCode, password);
-        if (login != null) {
+
+        try {
+            // 登陆
+            String login = loginService.login(loginCode, password);
+            if (StringUtils.isEmpty(login)) return BaseResult.ER("登陆失败: 网络故障");
+            BaseResult loginResult = JsonUtils.json2pojo(login, BaseResult.class);
+            if (!loginResult.getResult()) return loginResult;
+
+            // 缓存token
             String token = UUID.randomUUID().toString();
-            String redisResult = redisCacheService.set(token, JsonUtils.obj2json(login), 60 * 60 * 24 * 7);
-            if (redisResult != null ){
-                result = JsonUtils.json2pojo(redisResult, BaseResult.class);
-                if (result.getResult()) {
-                    CookieUtils.setCookie(request, response, HttpConstant.COOKIE_TOKEN, token);
-                    request.getSession().setAttribute(HttpConstant.SESSION_USER, login);
-                    result = BaseResult.OK(login, "登陆成功");
-                }
-            } else {
-                result = BaseResult.ER("登陆失败: 网络故障");
-            }
-        } else {
-            result = BaseResult.ER("登陆失败: 登录帐号或者密码错误");
+            String redis = redisCacheService.set(token, JsonUtils.obj2json(login), 60 * 60 * 24 * 7);
+            if (StringUtils.isEmpty(redis)) return BaseResult.ER("登陆失败: 网络故障");
+            BaseResult redisResult = JsonUtils.json2pojo(redis, BaseResult.class);
+            if (!redisResult.getResult()) return redisResult;
+
+            // 设置cookie
+            CookieUtils.setCookie(request, response, HttpConstant.COOKIE_TOKEN, token);
+            request.getSession().setAttribute(HttpConstant.SESSION_USER, login);
+            result = BaseResult.OK(login, "登陆成功");
+
+        } catch (Exception e) {
+            result = BaseResult.ER(String.format("登陆失败: 网络故障 | %s", e.getMessage()));
         }
+
         return result;
     }
 
@@ -93,20 +100,15 @@ public class LoginController {
     @GetMapping("logout")
     public BaseResult logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
         BaseResult result;
-
         String token = CookieUtils.getCookieValue(request, HttpConstant.COOKIE_TOKEN);
-
         if (StringUtils.isNotBlank(token)) {
-            String redisResult = redisCacheService.set(token, "-", 1);
-            if (redisResult != null ){
-                result = JsonUtils.json2pojo(redisResult, BaseResult.class);
-                if (result.getResult()) {
-                    CookieUtils.deleteCookie(request, response, HttpConstant.COOKIE_TOKEN);
-                    request.getSession().invalidate();
-                    result.setMessage("登出成功");
-                }
-            } else {
-                result = BaseResult.ER("登出失败: 网络故障");
+            String redis = redisCacheService.set(token, "-", 1);
+            if (StringUtils.isEmpty(redis)) return BaseResult.ER("登出失败: 网络故障");
+            result = JsonUtils.json2pojo(redis, BaseResult.class);
+            if (result.getResult()) {
+                CookieUtils.deleteCookie(request, response, HttpConstant.COOKIE_TOKEN);
+                request.getSession().invalidate();
+                result.setMessage("登出成功");
             }
         } else {
             result = BaseResult.ER("登出失败: 用户未登录");

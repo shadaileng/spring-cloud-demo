@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -29,6 +30,13 @@ public class UserMapperTest {
         user.setLoginCode("0001");
         user.setPassword("e10adc3949ba59abbe56e057f20f883e");
         List<User> users = userMapper.select(user);
+        System.out.println(users);
+    }
+    @Test
+    public void testSelectExample() {
+        Example example = new Example(User.class);
+        example.createCriteria().andEqualTo("loginCode", "0001").andNotEqualTo("id", 1);
+        List<User> users = userMapper.selectByExample(example);
         System.out.println(users);
     }
 }

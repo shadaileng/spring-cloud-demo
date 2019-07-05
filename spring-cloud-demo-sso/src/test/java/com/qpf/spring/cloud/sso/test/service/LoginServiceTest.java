@@ -2,6 +2,7 @@ package com.qpf.spring.cloud.sso.test.service;
 
 import com.qpf.spring.cloud.commons.domain.User;
 import com.qpf.spring.cloud.commons.dto.BaseResult;
+import com.qpf.spring.cloud.commons.utils.JsonUtils;
 import com.qpf.spring.cloud.sso.service.LoginService;
 import com.qpf.spring.cloud.sso.SSOApplication;
 import org.junit.Assert;
@@ -12,10 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 @Rollback
-@Transactional
 @ActiveProfiles("prod")
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {SSOApplication.class})
@@ -24,7 +23,7 @@ public class LoginServiceTest {
     private LoginService loginService;
 
     @Test
-    public void testRegister() {
+    public void testRegister() throws Exception {
         User user = new User();
         user.setUserName("0001");
         user.setPassword("123456");
@@ -40,12 +39,12 @@ public class LoginServiceTest {
         user.setCorpName("Bank");
         user.setCreateBy("1");
         user.setUpdateBy("1");
-        BaseResult result = loginService.register(user);
-        Assert.assertTrue(result.getResult());
+        String result = loginService.register(JsonUtils.obj2json(user));
+        Assert.assertTrue(JsonUtils.json2pojo(result, BaseResult.class).getResult());
     }
     @Test
-    public void testLogin() {
-        User login = loginService.login("0001", "123456");
+    public void testLogin() throws Exception {
+        String login = loginService.login("0001", "123456");
         Assert.assertNotNull(login);
         System.out.println(login);
     }

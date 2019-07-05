@@ -10,9 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginServiceHystrix implements LoginService {
 
-
     @Override
-    public String register(User user) throws Exception {
+    public String register(String userJson) throws Exception {
         return JsonUtils.obj2json(BaseResult.ER("502: Bad Gateway1"));
     }
 

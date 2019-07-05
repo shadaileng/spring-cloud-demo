@@ -8,7 +8,6 @@ import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboar
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import tk.mybatis.spring.annotation.MapperScan;
 
 @EnableSwagger2
 @EnableHystrixDashboard
@@ -18,7 +17,6 @@ import tk.mybatis.spring.annotation.MapperScan;
 // 服务提供者
 @EnableEurekaClient
 @SpringBootApplication(scanBasePackages = {"com.qpf.spring.cloud"})
-@MapperScan(basePackages = {"com.qpf.spring.cloud.commons.mapper"})
 public class SSOApplication {
     public static void main(String[] args) {
         SpringApplication.run(SSOApplication.class, args);

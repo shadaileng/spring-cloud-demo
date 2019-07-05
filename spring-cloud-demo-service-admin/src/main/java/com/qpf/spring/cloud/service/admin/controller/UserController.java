@@ -63,7 +63,7 @@ public class UserController {
         BaseResult result;
         try {
             User user = JsonUtils.json2pojo(userJson, User.class);
-            result = userService.save(user);
+            result = userService.save(user, "loginCode", "email", "phone");
         } catch (Exception e) {
             result = BaseResult.ER(String.format("ERROR: %s", e.getMessage()));
         }
@@ -117,19 +117,4 @@ public class UserController {
         return result;
     }
 
-    @ApiOperation("用户注册")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userJson", value = "用户Json字符串", dataTypeClass = String.class)
-    })
-    @PostMapping("register")
-    public BaseResult register(@RequestParam String userJson) {
-        BaseResult result;
-        try {
-            User user = JsonUtils.json2pojo(userJson, User.class);
-            result = userService.register(user);
-        } catch (Exception e) {
-            result = BaseResult.ER(String.format("ERROR: %s", e.getMessage()));
-        }
-        return result;
-    }
 }
