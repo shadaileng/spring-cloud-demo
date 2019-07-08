@@ -18,11 +18,6 @@
 
     <dependencies>
         <!-- Project Begin -->
-        <!--<dependency>-->
-            <!--<groupId>com.qpf</groupId>-->
-            <!--<artifactId>spring-cloud-demo-commons-service</artifactId>-->
-            <!--<version>${project.parent.version}</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>com.qpf</groupId>
             <artifactId>spring-cloud-demo-commons-web</artifactId>
@@ -35,24 +30,9 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
         <!-- Spring Boot End -->
 
         <!-- Spring Cloud Begin -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-        </dependency><dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
-    </dependency>
         <!-- Spring Cloud End -->
     </dependencies>
 

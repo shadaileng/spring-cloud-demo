@@ -13,7 +13,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableHystrixDashboard
 // 服务消费者
 @EnableFeignClients
-@EnableDiscoveryClient
+//@EnableDiscoveryClient
 // 服务提供者
 @EnableEurekaClient
 @SpringBootApplication(scanBasePackages = {"com.qpf.spring.cloud"})

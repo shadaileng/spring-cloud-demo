@@ -34,8 +34,8 @@ public class UserServiceImpl extends AbstractServiceImpl<User, UserMapper> imple
         if (user != null && StringUtils.equals(user.getPassword(), DigestUtils.md5DigestAsHex(password.getBytes()))) {
             result = BaseResult.OK(user, "登陆成功");
         } else {
-            logger.error("登陆失败");
-            result = BaseResult.ER("登陆失败");
+            logger.error("登陆失败: 账号或密码不正确");
+            result = BaseResult.ER("登陆失败: 账号或密码不正确");
         }
         return  result;
     }

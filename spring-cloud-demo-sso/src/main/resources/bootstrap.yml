@@ -11,6 +11,9 @@ spring:
       label: dev
       profile: dev
 ---
+feign:
+  hystrix:
+    enabled: true
 spring:
   profiles: prod
   cloud:
@@ -21,4 +24,3 @@ spring:
       profile: prod
 ipreg: localhost
 #ipreg: 192.168.0.7
-
