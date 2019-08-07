@@ -9,3 +9,11 @@ feign:
     enabled: true
 host:
   sso: http://${ipaddr}:8900
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            # 熔断器超时时间, 默认: 1000毫秒
+            timeoutInMilliseconds: 30000
