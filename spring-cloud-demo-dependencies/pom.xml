@@ -33,7 +33,7 @@
         <druid.version>1.1.10</druid.version>
         <th.mybatis.mapper.version>2.1.5</th.mybatis.mapper.version>
         <pagehelper.version>1.2.10</pagehelper.version>
-        <sqlite.jdbc.version>3.21.0.1</sqlite.jdbc.version>
+        <sqlite.jdbc.version>3.41.2.2</sqlite.jdbc.version>
     </properties>
 
     <dependencyManagement>
